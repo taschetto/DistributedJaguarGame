@@ -5,15 +5,19 @@
  */
 package game;
 
+import java.util.EnumSet;
+
 /**
  *
  * @author 12180247
  */
-public class Board {
+public class Position {
+  private int x;
+  private int y;
   
-  public static final int BOARD_WIDTH = 7;
-  public static final int BOARD_HEIGTH = 5;
-  
-  Board() {
+  Position(int x, int y)
+  {
+    this.x = x;
+    this.y = y;
   }
 }
