@@ -5,8 +5,6 @@
  */
 package game;
 
-import java.util.EnumSet;
-
 /**
  *
  * @author 12180247
@@ -20,4 +18,19 @@ public class Position {
     this.x = x;
     this.y = y;
   }
+  
+  public int getX()
+  {
+    return x;
+  }
+  
+  public int getY() {
+    return y;
+  }
+  
+  public void setCoordinates(int x, int y) {
+    this.x = x;
+    this.y = y;
+  }
 }
+  
