@@ -16,29 +16,27 @@ public class Board {
 
   public static final int COLS = 7;
   public static final int ROWS = 5;
-  
   public static final int DOGS = 14;
-  
+
   private Jaguar jaguar;
   private Dog[] dogs;
-  
+
   private final Map<Key, Position> positions;
 
   public Board() {
     jaguar = new Jaguar();
-
     dogs = new Dog[Board.DOGS];
+
     for (int i = 0; i < Board.DOGS; i++)
       dogs[i] = new Dog();
-    
+
     positions = new HashMap<>();
-    
     for (int x = 0; x < Board.COLS; x++)
       for (int y = 0; y < Board.ROWS; y++)
         positions.put(new Key(x, y), new Position(x, y));
-    
+
     positions.get(new Key(2, 2)).setPiece(jaguar);
-    
+
     int i = 0;
     for (int x = 0; x < 3; x++) {
       for (int y = 0; y < Board.ROWS; y++) {
