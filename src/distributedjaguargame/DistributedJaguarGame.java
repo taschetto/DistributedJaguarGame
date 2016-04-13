@@ -5,17 +5,18 @@
  */
 package distributedjaguargame;
 
+import game.Direction;
+import game.MoveValidator;
+
 /**
  *
  * @author 12180247
  */
 public class DistributedJaguarGame {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-    }
-    
+  /**
+   * @param args the command line arguments
+   */
+  public static void main(String[] args) {
+  }
 }

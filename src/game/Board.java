@@ -11,8 +11,8 @@ package game;
  */
 public class Board {
   
-  public static final int BOARD_WIDTH = 7;
-  public static final int BOARD_HEIGTH = 5;
+  public static final int X = 7;
+  public static final int Y = 5;
   
   Board() {
   }

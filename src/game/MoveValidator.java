@@ -7,100 +7,89 @@ package game;
 
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
- * @author 12180247
+ * @author Guilherme Taschetto and Bruno Klein
  */
 public class MoveValidator {
-  
-  private HashMap<Direction, Integer> deltaX;
-  private HashMap<Direction, Integer> deltaY;
-  
-  MoveValidator() {
-    EnumSet<Direction>[][] wow = null;
-    
-    for (int i = 0; i < Board.BOARD_HEIGTH; i++)
-      for (int j = 0; j < Board.BOARD_WIDTH; j++)
-        wow[i][j] = EnumSet.noneOf(Direction.class);
 
-    EnumSet<Direction> any = EnumSet.allOf(Direction.class);
-    EnumSet<Direction> almostAny = EnumSet.of(Direction.Up, Direction.Right, Direction.Down, Direction.Left);
-    
-    EnumSet<Direction> pos00 = EnumSet.of(Direction.Up, Direction.UpRight, Direction.Right);
-    EnumSet<Direction> pos10 = EnumSet.of(Direction.Up, Direction.Right,   Direction.Down);
-    EnumSet<Direction> pos20 = EnumSet.of(Direction.Up, Direction.UpRight, Direction.Right, Direction.DownRight, Direction.Down);
-    EnumSet<Direction> pos30 = pos10;
-    EnumSet<Direction> pos40 = EnumSet.of(Direction.Right, Direction.DownRight, Direction.Down);
-    
-    EnumSet<Direction> pos01 = EnumSet.of(Direction.Left, Direction.Up, Direction.Right);
-    EnumSet<Direction> pos11 = any;
-    EnumSet<Direction> pos21 = almostAny;
-    EnumSet<Direction> pos31 = any;
-    EnumSet<Direction> pos41 = EnumSet.of(Direction.Left, Direction.Right, Direction.Down);
-    
-    EnumSet<Direction> pos02 = EnumSet.of(Direction.Left, Direction.UpLeft, Direction.Up, Direction.UpRight, Direction.Right);
-    EnumSet<Direction> pos12 = almostAny;
-    EnumSet<Direction> pos22 = any;
-    EnumSet<Direction> pos32 = almostAny;
-    EnumSet<Direction> pos42 = EnumSet.of(Direction.Right, Direction.DownRight, Direction.Down, Direction.DownLeft, Direction.Left);
-    
-    EnumSet<Direction> pos03 = EnumSet.of(Direction.Left, Direction.Up, Direction.Right);
-    EnumSet<Direction> pos13 = any;
-    EnumSet<Direction> pos23 = almostAny;
-    EnumSet<Direction> pos33 = any;
-    EnumSet<Direction> pos43 = EnumSet.of(Direction.Left, Direction.Right, Direction.Down);
-    
-    EnumSet<Direction> pos04 = EnumSet.of(Direction.Left, Direction.UpLeft, Direction.Up);
-    EnumSet<Direction> pos14 = EnumSet.of(Direction.Left, Direction.Up, Direction.Down);
-    EnumSet<Direction> pos24 = any;
-    EnumSet<Direction> pos34 = pos14;
-    EnumSet<Direction> pos44 = EnumSet.of(Direction.Left, Direction.DownLeft, Direction.Down);
-    
-    EnumSet<Direction> pos05 = null;
-    EnumSet<Direction> pos15 = EnumSet.of(Direction.UpLeft, Direction.Up, Direction.DownRight);
-    EnumSet<Direction> pos25 = almostAny;
-    EnumSet<Direction> pos35 = EnumSet.of(Direction.DownLeft, Direction.UpRight, Direction.Down);
-    EnumSet<Direction> pos45 = null;
-    
-    EnumSet<Direction> pos06 = EnumSet.of(Direction.UpLeft, Direction.Up);
-    EnumSet<Direction> pos16 = null;
-    EnumSet<Direction> pos26 = EnumSet.of(Direction.Up, Direction.Down, Direction.Left);
-    EnumSet<Direction> pos36 = null;
-    EnumSet<Direction> pos46 = EnumSet.of(Direction.DownLeft, Direction.Down);
-    
-    deltaX.put(Direction.Up, 0);
-    deltaX.put(Direction.UpRight, 1);
-    deltaX.put(Direction.Right, 1);
-    deltaX.put(Direction.DownRight, 1);
-    deltaX.put(Direction.Down, 0);
-    deltaX.put(Direction.DownLeft, -1);
-    deltaX.put(Direction.Left, -1);
-    deltaX.put(Direction.UpLeft, -1);
+  class Key {
+    private final int x;
+    private final int y;
 
-    deltaY.put(Direction.Up, 1);
-    deltaY.put(Direction.UpRight, 1);
-    deltaY.put(Direction.Right, 0);
-    deltaY.put(Direction.DownRight, -1);
-    deltaY.put(Direction.Down, -1);
-    deltaY.put(Direction.DownLeft, -1);
-    deltaY.put(Direction.Left, 0);
-    deltaY.put(Direction.UpLeft, 1);
+    public Key(int x, int y) {
+      this.x = x;
+      this.y = y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof Key)) return false;
+      Key key = (Key) o;
+      return x == key.x && y == key.y;
+    }
+
+    @Override
+    public int hashCode() {
+      int result = x;
+      result = 31 * result + y;
+      return result;
+    }
   }
-  
-  boolean canIGoTo(int x, int y, Direction direction)
-  {
-    
-    return false;
+
+  private Map<Key, EnumSet<Direction>> moves;
+
+  public MoveValidator() {
+
+    moves = new HashMap<>();
+
+    moves.put(new Key(0, 0), EnumSet.of(Direction.Up, Direction.UpRight, Direction.Right));
+    moves.put(new Key(0, 1), EnumSet.of(Direction.Up, Direction.Right, Direction.Down));
+    moves.put(new Key(0, 2), EnumSet.of(Direction.Up, Direction.UpRight, Direction.Right, Direction.DownRight, Direction.Down));
+    moves.put(new Key(0, 3), EnumSet.of(Direction.Up, Direction.Right, Direction.Down));
+    moves.put(new Key(0, 4), EnumSet.of(Direction.Right, Direction.DownRight, Direction.Down));
+
+    moves.put(new Key(1, 0), EnumSet.of(Direction.Left, Direction.Up, Direction.Right));
+    moves.put(new Key(1, 1), EnumSet.allOf(Direction.class));
+    moves.put(new Key(1, 2), EnumSet.of(Direction.Up, Direction.Right, Direction.Down, Direction.Left));
+    moves.put(new Key(1, 3), EnumSet.allOf(Direction.class));
+    moves.put(new Key(1, 4), EnumSet.of(Direction.Left, Direction.Right, Direction.Down));
+
+    moves.put(new Key(2, 0), EnumSet.of(Direction.Left, Direction.UpLeft, Direction.Up, Direction.UpRight, Direction.Right));
+    moves.put(new Key(2, 1), EnumSet.of(Direction.Up, Direction.Right, Direction.Down, Direction.Left));
+    moves.put(new Key(2, 2), EnumSet.allOf(Direction.class));
+    moves.put(new Key(2, 3), EnumSet.of(Direction.Up, Direction.Right, Direction.Down, Direction.Left));
+    moves.put(new Key(2, 4), EnumSet.of(Direction.Right, Direction.DownRight, Direction.Down, Direction.DownLeft, Direction.Left));
+
+    moves.put(new Key(3, 0), EnumSet.of(Direction.Left, Direction.Up, Direction.Right));
+    moves.put(new Key(3, 1), EnumSet.allOf(Direction.class));
+    moves.put(new Key(3, 2), EnumSet.of(Direction.Up, Direction.Right, Direction.Down, Direction.Left));
+    moves.put(new Key(3, 3), EnumSet.allOf(Direction.class));
+    moves.put(new Key(3, 4), EnumSet.of(Direction.Left, Direction.Right, Direction.Down));
+
+    moves.put(new Key(4, 0), EnumSet.of(Direction.Left, Direction.UpLeft, Direction.Up));
+    moves.put(new Key(4, 1), EnumSet.of(Direction.Left, Direction.Up, Direction.Down));
+    moves.put(new Key(4, 2), EnumSet.allOf(Direction.class));
+    moves.put(new Key(4, 3), EnumSet.of(Direction.Left, Direction.Up, Direction.Down));
+    moves.put(new Key(4, 4), EnumSet.of(Direction.Left, Direction.Down, Direction.DownLeft));
+
+    moves.put(new Key(5, 0), EnumSet.noneOf(Direction.class));
+    moves.put(new Key(5, 1), EnumSet.of(Direction.UpLeft, Direction.Up, Direction.DownRight));
+    moves.put(new Key(5, 2), EnumSet.of(Direction.Up, Direction.Right, Direction.Down, Direction.Left));
+    moves.put(new Key(5, 3), EnumSet.of(Direction.DownLeft, Direction.UpRight, Direction.Down));
+    moves.put(new Key(5, 4), EnumSet.noneOf(Direction.class));
+
+    moves.put(new Key(6, 0), EnumSet.of(Direction.UpLeft, Direction.Up));
+    moves.put(new Key(6, 1), EnumSet.noneOf(Direction.class));
+    moves.put(new Key(6, 2), EnumSet.of(Direction.Up, Direction.Down, Direction.Left));
+    moves.put(new Key(6, 3), EnumSet.noneOf(Direction.class));
+    moves.put(new Key(6, 4), EnumSet.of(Direction.DownLeft, Direction.Down));
   }
-  
-  int getNewX(int x, Direction direction)
-  {
-    return x + deltaX.get(direction);
-  }
-  
-  int getNewY(int y, Direction direction)
-  {
-    return y + deltaY.get(direction);
-  }  
+
+  public boolean validate(int currentX, int currentY, Direction direction) {
+    return moves.get(new Key(currentX, currentY)).contains(direction);
+  } 
 }
