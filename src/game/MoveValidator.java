@@ -14,36 +14,19 @@ import java.util.Map;
  * @author Guilherme Taschetto and Bruno Klein
  */
 public class MoveValidator {
+  
+  private static MoveValidator instance;
 
-  class Key {
-    private final int x;
-    private final int y;
-
-    public Key(int x, int y) {
-      this.x = x;
-      this.y = y;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) return true;
-      if (!(o instanceof Key)) return false;
-      Key key = (Key) o;
-      return x == key.x && y == key.y;
-    }
-
-    @Override
-    public int hashCode() {
-      int result = x;
-      result = 31 * result + y;
-      return result;
-    }
+  private final Map<Key, EnumSet<Direction>> moves;
+  
+  public static MoveValidator getInstance() {
+    if (instance == null)
+      instance = new MoveValidator();
+    
+    return instance;
   }
 
-  private Map<Key, EnumSet<Direction>> moves;
-
-  public MoveValidator() {
-
+  private MoveValidator() {
     moves = new HashMap<>();
 
     moves.put(new Key(0, 0), EnumSet.of(Direction.Up, Direction.UpRight, Direction.Right));
