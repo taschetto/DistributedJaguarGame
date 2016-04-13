@@ -42,7 +42,7 @@ public class MoveValidatorTest {
    */
   @Test
   public void testValidate() {
-    MoveValidator instance = new MoveValidator();
+    MoveValidator instance = MoveValidator.getInstance();
 
     assertEquals(true,  instance.validate(0, 0, Direction.Up));
     assertEquals(true,  instance.validate(0, 0, Direction.UpRight));
