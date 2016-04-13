@@ -10,27 +10,33 @@ package game;
  * @author 12180247
  */
 public class Position {
-  private int x;
-  private int y;
+  private final int x;
+  private final int y;
+  private Piece piece;
   
-  Position(int x, int y)
-  {
+  public Position(int x, int y) {
     this.x = x;
     this.y = y;
+    this.piece = null;
   }
   
-  public int getX()
-  {
-    return x;
+  public void setPiece(Piece piece) {
+    this.piece = piece;
+    
+    if (this.piece != null)
+      piece.setPosition(this);
+  }
+  
+  public Piece getPiece() {
+    return this.piece;
+  }
+  
+  public int getX() {
+    return this.x;
   }
   
   public int getY() {
-    return y;
-  }
-  
-  public void setCoordinates(int x, int y) {
-    this.x = x;
-    this.y = y;
+    return this.y;
   }
 }
   
