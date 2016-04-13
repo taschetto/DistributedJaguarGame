@@ -17,6 +17,8 @@ public abstract class Piece {
     this.position = null;
   }
   
+  public abstract Key move(Direction direction);
+  
   public void setPosition(Position position) {
     this.position = position;
   }

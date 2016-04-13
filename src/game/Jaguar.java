@@ -18,6 +18,11 @@ public class Jaguar extends Piece {
   public String toString() {
     return "J";
   }
+
+  @Override
+  public Key move(Direction direction) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
   
   
 }

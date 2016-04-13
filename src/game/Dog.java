@@ -17,4 +17,9 @@ public class Dog extends Piece {
   public String toString() {
     return "D";
   }  
+
+  @Override
+  public Key move(Direction direction) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
 }
