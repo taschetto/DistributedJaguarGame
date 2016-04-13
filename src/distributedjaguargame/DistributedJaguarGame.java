@@ -18,7 +18,6 @@ public class DistributedJaguarGame {
    * @param args the command line arguments
    */
   public static void main(String[] args) {
-    MoveValidator validador = MoveValidator.getInstance();
     Board board = new Board();
     System.out.println(board.toString());
   }
