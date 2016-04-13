@@ -11,13 +11,13 @@ package game;
  */
 public class Jaguar extends Piece {
   
-  Jaguar(int x, int y)
-  {
-    super(x, y);
+  public Jaguar() {
+  }
+
+  @Override
+  public String toString() {
+    return "J";
   }
   
-  public void attack(Position targetPosition, Direction direction)
-  {
-    coordinates.setCoordinates(0 + direction.getX(), 0 + direction.getY());
-  }
+  
 }

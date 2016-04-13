@@ -9,21 +9,15 @@ package game;
  *
  * @author bruno
  */
-public class Piece {
-  protected Position coordinates;
+public abstract class Piece {
   
-  Piece(int x, int y) 
-  {
-    coordinates = new Position(x, y);
+  protected Position position;
+  
+  Piece() {
+    this.position = null;
   }
   
-  public void move(int x, int y) 
-  {
-    coordinates.setCoordinates(x, y);
-  }
-  
-  public Position getCoordinates()
-  {
-    return coordinates;
+  public void setPosition(Position position) {
+    this.position = position;
   }
 }

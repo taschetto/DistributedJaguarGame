@@ -11,7 +11,10 @@ package game;
  */
 public class Dog extends Piece {
   
-  Dog(int x, int y) {
-   super(x, y); 
-  }
+  public Dog() {}
+
+  @Override
+  public String toString() {
+    return "D";
+  }  
 }
