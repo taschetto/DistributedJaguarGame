@@ -23,13 +23,12 @@ public enum Direction {
     this.yCoordinate = yCoordinate;
   }  
   
-  int getNextX(int currentX)
+  Key getNextPosition(int currentX, int currentY)
   {
-    return currentX + this.xCoordinate;
-  }
-  
-  int getNextY(int currentY)
-  {
-    return currentY + this.yCoordinate;
+    int multiplier = 1;
+    if (currentX == 6) multiplier = 2;
+    int nextX = currentX + this.xCoordinate,
+        nextY = currentY + this.yCoordinate * multiplier;
+    return new Key(nextX, nextY);
   }
 }

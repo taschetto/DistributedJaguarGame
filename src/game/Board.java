@@ -82,16 +82,50 @@ public class Board {
     for (int y = Board.ROWS - 1; y >= 0; y--) {
       for (int x = 0; x < Board.COLS; x++) {
         Piece piece = positions.get(new Key(x, y)).getPiece();
-        if (piece == null) {
-          if (x == 5 && (y == 0 || y == 4)) str += "  " + " ";
-          else str += "··" + " ";
-          continue;
+        if (piece != null) {
+          str += "[" + piece.toString() + "]";
         }
-
-        str += piece.toString() + " ";
+        else {
+          if (x == 5 && (y == 0 || y == 4))
+            str += "    ";
+          else {
+            if (x == 6 && (y == 1 || y == 3))
+              str += " |";
+            else
+              str += "[  ]";
+          }
+        }
+        
+        if (x < 4) {
+          str += "--";
+        }
+        else {
+          if (y == 2 && x < 6)
+            str += "--";
+          else
+            str += "  ";
+        }
       }
       str += "\n";
+      switch (y) {
+        case 4: str += " |  \\  |  /  |  \\  |  /  |        /  |\n"; break;
+        case 3: str += " |  /  |  \\  |  /  |  \\  |  /        |\n"; break;
+        case 2: str += " |  \\  |  /  |  \\  |  /  |  \\        |\n"; break;
+        case 1: str += " |  /  |  \\  |  /  |  \\  |        \\  |\n"; break;
+        default: break;
+      }
     }
     return str;
   }
 }
+/*
+[05]--[10]--[14]--[  ]--[  ]        [  ]
+ |  \  |  /  |  \  |  /  |        /  |
+[04]--[09]--[13]--[  ]--[  ]  [  ]   |
+ |  /  |  \  |  /  |  \  |  /        |
+[03]--[08]--[JA]--[  ]--[  ]--[  ]--[  ]
+ |  \  |  /  |  \  |  /  |  \        |
+[02]--[07]--[12]--[  ]--[  ]  [  ]   |
+ |  /  |  \  |  /  |  \  |        \  |
+[01]--[06]--[11]--[  ]--[  ]        [  ]
+*/

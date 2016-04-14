@@ -69,8 +69,4 @@ public class MoveValidator {
   public boolean validate(int currentX, int currentY, Direction direction) {
     return moves.get(new Key(currentX, currentY)).contains(direction);
   }
-  
-  public Key getNextPosition(int currentX, int currentY, Direction direction) {
-    return new Key(currentX + direction.getX(), currentY + direction.getY());
-  }
 }

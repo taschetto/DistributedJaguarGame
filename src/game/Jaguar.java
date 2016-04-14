@@ -14,20 +14,31 @@ public class Jaguar extends Piece {
   public boolean canMove(Direction direction)
   {
     if (direction == null) return false;
+    
+    int x = this.position.getX(),
+        y = this.position.getY();
+    
     MoveValidator validator = MoveValidator.getInstance();
-    boolean part1 = validator.validate(this.position.getX(), this.position.getY(), direction);
+    if (!validator.validate(x, y, direction))
+      return false;
     
-    Key nextKey = validator.getNextPosition(this.position.getX(), this.position.getY(), direction);
-    Position nextPosition = this.board.getPosition(nextKey);
-    boolean part2 = nextPosition.getPiece() == null;
-    
-    return part1 && part2;
+    Position nextPosition = this.board.getPosition(direction.getNextPosition(x, y));
+    return nextPosition.getPiece() == null;
   }
 
   @Override
   public Key move(Direction direction) {
     System.out.println("Jaguar moving " + direction.name() + "!");
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    this.getPosition().setPiece(null);
+
+    MoveValidator validator = MoveValidator.getInstance();
+    Key nextKey = direction.getNextPosition(this.position.getX(), this.position.getY());
+    
+    Position position = this.board.getPosition(nextKey);
+    position.setPiece(this);
+
+    return nextKey;
   }
   
   @Override
