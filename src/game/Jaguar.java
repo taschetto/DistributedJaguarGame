@@ -1,13 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package game;
 
 /**
  *
- * @author bruno
+ * @author Guilherme Taschetto and Bruno Klein
  */
 public class Jaguar extends Piece {
   
@@ -31,6 +26,6 @@ public class Jaguar extends Piece {
   
   @Override
   public String toString() {
-    return "J";
+    return "JA";
   }
 }

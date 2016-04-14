@@ -2,7 +2,7 @@ package game;
 
 /**
  *
- * @author bruno
+ * @author Guilherme Taschetto and Bruno Klein
  */
 public abstract class Piece {
   
@@ -14,12 +14,12 @@ public abstract class Piece {
     this.position = null;
   }
   
-  public void setPosition(Position position) {
-    this.position = position;
-  }
-  
   public Position getPosition() {
     return this.position;
+  }
+  
+  public void setPosition(Position position) {
+    this.position = position;
   }
   
   public abstract boolean canMove(Direction direction);

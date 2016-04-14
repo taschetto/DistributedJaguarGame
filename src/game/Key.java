@@ -1,13 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package game;
 
 /**
  *
- * @author taschetto
+ * @author Guilherme Taschetto and Bruno Klein
  */
 public class Key {
   private final int x;

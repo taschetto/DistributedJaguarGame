@@ -1,18 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package game;
 
 import java.util.Scanner;
 
 /**
  *
- * @author taschetto
+ * @author Guilherme Taschetto and Bruno Klein
  */
 public class Game {
-  private Board board;
+  private final Board board;
   
   public Game() {
     this.board = new Board();
@@ -30,9 +25,9 @@ public class Game {
     System.out.println("Player 1 (Jaguar)");
     Piece jaguar = board.getJaguar();
     Direction direction = null;
-    while (!board.canMove(jaguar, direction = chooseDirection())) {
+    while (!board.canMove(jaguar, direction = promptForDirection())) {
       System.out.println("Jaguar can't move " + direction.name() + "!");
-      direction = chooseDirection();
+      direction = promptForDirection();
     }
     board.move(jaguar, direction);
   }
@@ -40,7 +35,7 @@ public class Game {
   public void player2() {
   }
   
-  public Direction chooseDirection() {
+  public Direction promptForDirection() {
     Scanner in = new Scanner(System.in);
     StringBuilder output = new StringBuilder("Which way you wanna go?\n");
     Direction[] directions = Direction.values();

@@ -1,13 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package game;
 
 /**
  *
- * @author 12180247
+ * @author Guilherme Taschetto and Bruno Klein
  */
 public class Position {
   private final int x;
@@ -20,13 +15,6 @@ public class Position {
     this.piece = null;
   }
   
-  public void setPiece(Piece piece) {
-    this.piece = piece;
-    
-    if (this.piece != null)
-      piece.setPosition(this);
-  }
-  
   public Piece getPiece() {
     return this.piece;
   }
@@ -37,6 +25,13 @@ public class Position {
   
   public int getY() {
     return this.y;
+  }
+  
+  public void setPiece(Piece piece) {
+    this.piece = piece;
+    
+    if (this.piece != null)
+      piece.setPosition(this);
   }
 }
   
