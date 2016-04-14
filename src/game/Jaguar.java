@@ -15,7 +15,13 @@ public class Jaguar extends Piece {
   {
     if (direction == null) return false;
     MoveValidator validator = MoveValidator.getInstance();
-    return validator.validate(this.position.getX(), this.position.getY(), direction);
+    boolean part1 = validator.validate(this.position.getX(), this.position.getY(), direction);
+    
+    Key nextKey = validator.getNextPosition(this.position.getX(), this.position.getY(), direction);
+    Position nextPosition = this.board.getPosition(nextKey);
+    boolean part2 = nextPosition.getPiece() == null;
+    
+    return part1 && part2;
   }
 
   @Override
