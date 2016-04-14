@@ -1,20 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package game;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 
 /**
  *
- * @author 12180247
+ * @author Guilherme Taschetto and Bruno Klein
  */
 public class Board {
 
@@ -28,24 +22,24 @@ public class Board {
   private final Map<Key, Position> positions;
 
   public Board() {
-    jaguar = new Jaguar(this);
-    dogs = new HashSet<>();
-
-    for (int i = 0; i < Board.DOGS; i++)
-      dogs.add(new Dog(this));
-
     positions = new HashMap<>();
-    for (int x = 0; x < Board.COLS; x++)
-      for (int y = 0; y < Board.ROWS; y++)
+    for (int x = 0; x < Board.COLS; x++) {
+      for (int y = 0; y < Board.ROWS; y++) {
         positions.put(new Key(x, y), new Position(x, y));
+      }
+    }
 
-    positions.get(new Key(3, 0)).setPiece(jaguar);
+    jaguar = new Jaguar(this);
+    positions.get(new Key(2, 2)).setPiece(jaguar);
     
-    Iterator<Dog> it = dogs.iterator();
-    for (int x = 0; it.hasNext() && x < 3; x++) {
-      for (int y = 0; it.hasNext() && y < Board.ROWS; y++) {
-        if (x == 2 && y == 2) continue;
-        positions.get(new Key(x, y)).setPiece(it.next());
+    int dogId = 1;
+    dogs = new HashSet<>();
+    for (int x = 0; x < 3; x++) {
+      for (int y = 0; y < Board.ROWS; y++) {
+        if (x == 2 && y == 2) continue; // skip Jaguar's location    
+        Dog dog = new Dog(dogId++, this);
+        dogs.add(dog);
+        positions.get(new Key(x, y)).setPiece(dog);
       }
     }
   }
@@ -85,12 +79,12 @@ public class Board {
       for (int x = 0; x < Board.COLS; x++) {
         Piece piece = positions.get(new Key(x, y)).getPiece();
         if (piece == null) {
-          if (x == 5 && (y == 0 || y == 4)) str += " ";
-          else str += "·";
+          if (x == 5 && (y == 0 || y == 4)) str += "  " + " ";
+          else str += "··" + " ";
           continue;
         }
 
-        str += piece.toString();
+        str += piece.toString() + " ";
       }
       str += "\n";
     }
