@@ -52,6 +52,10 @@ public class Board {
     piece.move(direction);
   }
   
+  public Position getPosition(Key key) {
+    return positions.get(key);
+  }
+  
   public Jaguar getJaguar() {
     return this.jaguar;
   }
