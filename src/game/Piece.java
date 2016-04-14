@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package game;
 
 /**
@@ -11,15 +6,22 @@ package game;
  */
 public abstract class Piece {
   
+  protected Board board;
   protected Position position;
   
-  Piece() {
+  Piece(Board board) {
+    this.board = board;
     this.position = null;
   }
-  
-  public abstract Key move(Direction direction);
   
   public void setPosition(Position position) {
     this.position = position;
   }
+  
+  public Position getPosition() {
+    return this.position;
+  }
+  
+  public abstract boolean canMove(Direction direction);
+  public abstract Key move(Direction direction);
 }
