@@ -20,14 +20,29 @@ public class Dog extends Piece {
   @Override
   public boolean canMove(Direction direction) {
     if (direction == null) return false;
+    
+    int x = this.position.getX(),
+        y = this.position.getY();
+    
     MoveValidator validator = MoveValidator.getInstance();
-    return validator.validate(this.position.getX(), this.position.getY(), direction);
+    if (!validator.validate(x, y, direction))
+      return false;
+    
+    Position nextPosition = this.board.getPosition(direction.getNextPosition(x, y));
+    return nextPosition.getPiece() == null;
   }
 
   @Override
   public Key move(Direction direction) {
-    System.out.println("Dog #" + id + " moving " + direction.name() + "!");
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    this.getPosition().setPiece(null);
+
+    MoveValidator validator = MoveValidator.getInstance();
+    Key nextKey = direction.getNextPosition(this.position.getX(), this.position.getY());
+    
+    Position position = this.board.getPosition(nextKey);
+    position.setPiece(this);
+
+    return nextKey;
   }
   
   @Override

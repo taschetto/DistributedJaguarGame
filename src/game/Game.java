@@ -1,5 +1,7 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 /**
@@ -17,12 +19,13 @@ public class Game {
     while(!board.hasWinner()) {
       System.out.println(board.toString());
       player1();
-      //player2();
+      System.out.println(board.toString());
+      player2();
     }
   }
   
   public void player1() {
-    System.out.println("Player 1 (Jaguar)");
+    System.out.print("Player 1 (Jaguar) - ");
     Piece jaguar = board.getJaguar();
     Direction direction = null;
     while (!board.canMove(jaguar, direction = promptForDirection())) {
@@ -32,17 +35,25 @@ public class Game {
   }
 
   public void player2() {
+    System.out.print("Player 2 (Doges) - ");
+    Dog dog = promptForDog();
+    Direction direction = null;
+    while (!board.canMove(dog, direction = promptForDirection())) {
+      System.out.println("Doge " + dog.getId() + " can't move " + direction.name() + "!");
+    }
+    board.move(dog, direction);
   }
   
   public Direction promptForDirection() {
-    StringBuilder output = new StringBuilder("Which way you wanna go?\n");
+    StringBuilder output = new StringBuilder("Which way you wanna go?\n\t");
 
     Direction[] directions = Direction.values();
     for (int i = 0, len = directions.length; i < len; i++) {
-      output.append("\t").append(i + 1).append(": ")
-            .append(directions[i].name()).append("\n");
+      output.append(i + 1).append(": ")
+            .append(directions[i].name());
+      if (i != len - 1) output.append(", ");
     }
-    output.append(" >> ");
+    output.append("\n").append(" >> ");
 
     int playerChoice = 0;
     Direction dir = null;
@@ -65,5 +76,30 @@ public class Game {
     }
 
     return dir;
+  }
+  
+  public Dog promptForDog() {
+    StringBuilder output = new StringBuilder("Which doge you wanna move?\n\t");
+
+    ArrayList<Integer> dogs = board.getAliveDogs();
+    
+    Iterator it = dogs.iterator();
+    while (it.hasNext()) {
+      output.append(it.next());
+      if (it.hasNext())
+        output.append(", ");
+    }
+    output.append("\n >> ");
+
+    int playerChoice = 0;
+    Dog dog = null;
+
+    while (dog == null) {
+      System.out.print(output.toString());
+      playerChoice = Integer.parseInt(new Scanner(System.in).next());
+      dog = board.getDog(playerChoice);
+    }
+
+    return dog;
   }
 }

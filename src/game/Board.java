@@ -1,10 +1,9 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -17,7 +16,7 @@ public class Board {
   public static final int DOGS = 14;
 
   private Jaguar jaguar;
-  private Set<Dog> dogs;
+  private Map<Integer, Dog> dogs;
 
   private final Map<Key, Position> positions;
 
@@ -33,12 +32,12 @@ public class Board {
     positions.get(new Key(2, 2)).setPiece(jaguar);
     
     int dogId = 1;
-    dogs = new HashSet<>();
+    dogs = new HashMap<>();
     for (int x = 0; x < 3; x++) {
       for (int y = 0; y < Board.ROWS; y++) {
         if (x == 2 && y == 2) continue; // skip Jaguar's location    
         Dog dog = new Dog(dogId++, this);
-        dogs.add(dog);
+        dogs.put(dog.getId(), dog);
         positions.get(new Key(x, y)).setPiece(dog);
       }
     }
@@ -58,6 +57,20 @@ public class Board {
   
   public Jaguar getJaguar() {
     return this.jaguar;
+  }
+  
+  public Dog getDog(int dogId) {
+    return this.dogs.get(dogId);
+  }
+  
+  public ArrayList<Integer> getAliveDogs() {
+    ArrayList<Integer> ids = new ArrayList<>();
+
+    for (Map.Entry pair : this.dogs.entrySet()) {
+      Dog doge = (Dog)pair.getValue();
+      ids.add(doge.getId());      
+    }
+    return ids;
   }
   
   public boolean hasWinner() {

@@ -28,8 +28,6 @@ public class Jaguar extends Piece {
 
   @Override
   public Key move(Direction direction) {
-    System.out.println("Jaguar moving " + direction.name() + "!");
-    
     this.getPosition().setPiece(null);
 
     MoveValidator validator = MoveValidator.getInstance();
