@@ -2,7 +2,7 @@ package game;
 
 /**
  *
- * @author Guilherme Taschetto and Bruno Klein
+ * @author Guilherme Taschetto
  */
 public class Key {
   private final int x;

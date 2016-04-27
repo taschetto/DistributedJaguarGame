@@ -6,10 +6,9 @@ import java.util.Map;
 
 /**
  *
- * @author Guilherme Taschetto and Bruno Klein
+ * @author Guilherme Taschetto
  */
 public class MoveValidator {
-  
   private static MoveValidator instance;
   private final Map<Key, EnumSet<Direction>> moves;
   
@@ -66,7 +65,7 @@ public class MoveValidator {
     moves.put(new Key(6, 4), EnumSet.of(Direction.DownLeft, Direction.Down));
   }
 
-  public boolean validate(int currentX, int currentY, Direction direction) {
-    return moves.get(new Key(currentX, currentY)).contains(direction);
+  public boolean validate(int x, int y, Direction direction) {
+    return moves.get(new Key(x, y)).contains(direction);
   }
 }

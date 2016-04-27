@@ -2,10 +2,9 @@ package game;
 
 /**
  *
- * @author Guilherme Taschetto and Bruno Klein
+ * @author Guilherme Taschetto
  */
 public class Dog extends Piece {
-  
   private final int id;
   
   public Dog(int id, Board board) {
@@ -19,30 +18,36 @@ public class Dog extends Piece {
 
   @Override
   public boolean canMove(Direction direction) {
+    
     if (direction == null) return false;
     
     int x = this.position.getX(),
         y = this.position.getY();
     
-    MoveValidator validator = MoveValidator.getInstance();
-    if (!validator.validate(x, y, direction))
-      return false;
+    // Valida se a direção é válida a partir da posição atual.
+    if (!this.board.isMoveValid(x, y, direction)) return false;
     
-    Position nextPosition = this.board.getPosition(direction.getNextPosition(x, y));
-    return nextPosition.getPiece() == null;
+    // Depois verifica se a nova posição está vazia.
+    Position next = this.board.getNextPosition(x, y, direction);
+    return next.isEmpty();
   }
 
   @Override
-  public Key move(Direction direction) {
-    this.getPosition().setPiece(null);
-
-    MoveValidator validator = MoveValidator.getInstance();
-    Key nextKey = direction.getNextPosition(this.position.getX(), this.position.getY());
+  public void move(Direction direction) {
+    // Ao iniciar este método, é GARANTIDO que o cachorro pode mover-se na
+    // direção.
     
-    Position position = this.board.getPosition(nextKey);
-    position.setPiece(this);
+    int x = this.position.getX(),
+        y = this.position.getY();
 
-    return nextKey;
+    // Libera a posição atual.
+    this.position.setPiece(null);
+
+    // Calcula a nova posição da peça.
+    Position next = this.board.getNextPosition(x, y, direction);
+    
+    // Move a peça de fato.
+    next.setPiece(this);
   }
   
   @Override

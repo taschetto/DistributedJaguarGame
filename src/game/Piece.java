@@ -2,10 +2,9 @@ package game;
 
 /**
  *
- * @author Guilherme Taschetto and Bruno Klein
+ * @author Guilherme Taschetto
  */
 public abstract class Piece {
-  
   protected Board board;
   protected Position position;
   
@@ -23,5 +22,5 @@ public abstract class Piece {
   }
   
   public abstract boolean canMove(Direction direction);
-  public abstract Key move(Direction direction);
+  public abstract void move(Direction direction);
 }

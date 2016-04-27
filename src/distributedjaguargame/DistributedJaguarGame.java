@@ -4,7 +4,7 @@ import game.Game;
 
 /**
  *
- * @author Guilherme Taschetto and Bruno Klein
+ * @author Guilherme Taschetto
  */
 public class DistributedJaguarGame {
 

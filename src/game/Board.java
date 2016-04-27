@@ -1,24 +1,22 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
  *
- * @author Guilherme Taschetto and Bruno Klein
+ * @author Guilherme Taschetto
  */
 public class Board {
-
   public static final int COLS = 7;
   public static final int ROWS = 5;
   public static final int DOGS = 14;
 
+  private final Map<Key, Position> positions;
   private Jaguar jaguar;
   private Map<Integer, Dog> dogs;
-
-  private final Map<Key, Position> positions;
 
   public Board() {
     positions = new HashMap<>();
@@ -43,6 +41,15 @@ public class Board {
     }
   }
   
+  public boolean isMoveValid(int x, int y, Direction d) {
+    MoveValidator validator = MoveValidator.getInstance();
+    return (validator.validate(x, y, d));
+  }
+  
+  public Position getNextPosition(int x, int y, Direction d) {
+    return getPosition(d.getNextKey(x, y));
+  }
+  
   public boolean canMove(Piece piece, Direction direction) {
     return piece.canMove(direction);
   }
@@ -63,6 +70,19 @@ public class Board {
     return this.dogs.get(dogId);
   }
   
+  public void eatDog(int dogId) {
+    this.dogs.remove(dogId);
+  }
+  
+  public boolean hasAnyMoves(Piece piece) {
+    for (Direction d : EnumSet.allOf(Direction.class)) {
+      if (piece.canMove(d)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
   public ArrayList<Integer> getAliveDogs() {
     ArrayList<Integer> ids = new ArrayList<>();
 
@@ -73,14 +93,10 @@ public class Board {
     return ids;
   }
   
-  public boolean hasWinner() {
-    return verifyDogsVictory() || verifyJaguarVictory();
-  }
-  
   public boolean verifyDogsVictory() {
     // Para os cães ganharem o jogo, a onça precisa não ter nenhum movimento
     // válido à partir da sua posição atual.
-    return false;
+    return !hasAnyMoves(this.jaguar);
   }
   
   public boolean verifyJaguarVictory() {

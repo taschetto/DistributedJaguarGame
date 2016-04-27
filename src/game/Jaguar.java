@@ -2,49 +2,78 @@ package game;
 
 /**
  *
- * @author Guilherme Taschetto and Bruno Klein
+ * @author Guilherme Taschetto
  */
 public class Jaguar extends Piece {
-  
+
   public Jaguar(Board board) {
     super(board);
   }
-
+  
   @Override
   public boolean canMove(Direction direction)
   {
     if (direction == null) return false;
     
-    // Pega as coordenadas atuais do Jaguar.
     int x = this.position.getX(),
         y = this.position.getY();
     
-    // Valida se a direção é válida.
-    MoveValidator validator = MoveValidator.getInstance();
-    if (!validator.validate(x, y, direction))
-      return false;
+    // Valida se a direção é válida a partir da posição atual.
+    if (!this.board.isMoveValid(x, y, direction)) return false;
+      
+    // Se a direção é válida, calcula qual será a nova posição.
+    Position next = this.board.getNextPosition(x, y, direction);
     
-    // Se a direção é válida, valida se a nova posição está disponível.
-    Position nextPosition = this.board.getPosition(direction.getNextPosition(x, y));
-    return nextPosition.getPiece() == null;
+    // Se a nova posição está vazia, pode mover.
+    if (next.isEmpty()) return true;
+    
+    // Do contrário...
+    
+    x = next.getX();
+    y = next.getY();
+    
+    // Valida se a mesma direção é válida a partir da nova posição.
+    if (!this.board.isMoveValid(x, y, direction)) return false;
+    
+    // Se a direção é válida, calcula a "nova nova" posição.
+    Position nextNext = this.board.getNextPosition(x, y, direction);
+    
+    // Se a "nova nova" posição está vazia, pode mover.
+    return nextNext.isEmpty();
   }
 
   @Override
-  public Key move(Direction direction) {
+  public void move(Direction direction) {
+    // Ao iniciar este método, é GARANTIDO que o Jaguar pode mover-se na
+    // direção, seja para andar ou para comer um cachorro.
+    
+    int x = this.position.getX(),
+        y = this.position.getY();
+    
     // Libera a posição atual.
-    this.getPosition().setPiece(null);
+    this.position.setPiece(null);
 
-    // Calcula a chave da nova posição indo na direção.
-    MoveValidator validator = MoveValidator.getInstance();
-    Key nextKey = direction.getNextPosition(this.position.getX(), this.position.getY());
+    // Calcula a nova posição da peça.
+    Position next = this.board.getNextPosition(x, y, direction);
     
-    // Busca a nova posição usando a chave calculada.
-    Position position = this.board.getPosition(nextKey);
-    
-    // Coloca a peça na nova posição, de fato.
-    position.setPiece(this);
-
-    return nextKey;
+    // Se a próxima posição está vazia, o Jaguar simplesmente move-se para lá.
+    if (next.isEmpty()) {
+      next.setPiece(this);
+    } else {
+      // Se não, em 'next' há um cachorro que pode ser comido. Primeiro, devemos
+      // devolver o cachorro ao lugar de onde nunca deveria ter saído: o céu.
+      
+      // Transforma o cachorro em HISTÓRIA.
+      Dog dog = (Dog)next.getPiece();
+      this.board.eatDog(dog.getId());
+      next.setPiece(null);
+      
+      // Em seguida, calculamos a posição do Jaguar após comer o cachorro.
+      x = next.getX();
+      y = next.getY();
+      Position nextNext = this.board.getNextPosition(x, y, direction);
+      nextNext.setPiece(this);
+    }
   }
   
   @Override

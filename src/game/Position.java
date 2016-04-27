@@ -2,7 +2,7 @@ package game;
 
 /**
  *
- * @author Guilherme Taschetto and Bruno Klein
+ * @author Guilherme Taschetto
  */
 public class Position {
   private final int x;
@@ -19,6 +19,13 @@ public class Position {
     return this.piece;
   }
   
+  public void setPiece(Piece piece) {
+    this.piece = piece;
+    
+    if (this.piece != null)
+      piece.setPosition(this);
+  }
+  
   public int getX() {
     return this.x;
   }
@@ -27,11 +34,8 @@ public class Position {
     return this.y;
   }
   
-  public void setPiece(Piece piece) {
-    this.piece = piece;
-    
-    if (this.piece != null)
-      piece.setPosition(this);
+  public boolean isEmpty() {
+    return this.piece == null;
   }
 }
   
