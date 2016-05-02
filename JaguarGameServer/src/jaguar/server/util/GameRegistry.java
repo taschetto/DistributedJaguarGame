@@ -36,7 +36,7 @@ public class GameRegistry {
   public Game getGame() throws InterruptedException {
     mutex.acquire();
     for (Game game : this.gameRegistry) {
-      if (game.canPlayerJoin()) {
+      if (!game.hasPlayer1() || !game.hasPlayer2()) {
         mutex.release();
         return game;
       }

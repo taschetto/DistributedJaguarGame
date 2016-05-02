@@ -1,5 +1,6 @@
 package jaguar.server.util;
 
+import jaguar.common.PlayerType;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,6 +73,36 @@ public class PlayerRegistry {
       return -1; // Erro
     }
     else return 0;
+  }
+  
+  public int isMyTurn(int playerId) throws InterruptedException {
+    mutex.acquire();
+    Player p = this.players.get(playerId);
+    Game g = p.getGame();
+    mutex.release();
+    
+    if (!g.hasPlayer1() || !g.hasPlayer2()) return -1; // Erro
+    
+    if (g.isPlayer1(p)) {
+      if (g.isPlayer1Winner()) return 2;
+      if (g.isPlayer2Winner()) return 3;
+      if (g.getTurn() == PlayerType.Jaguar) return 1;
+      else return 0;      
+    } else if (g.isPlayer2(p)) {
+      if (g.isPlayer1Winner()) return 3;
+      if (g.isPlayer2Winner()) return 2;      
+      if (g.getTurn() == PlayerType.Dog) return 1;
+      else return 0;
+    } else return -1; // Erro
+  }
+  
+  public String getGrid(int playerId) throws InterruptedException {
+    mutex.acquire();
+    Player p = this.players.get(playerId);
+    Game g = p.getGame();
+    mutex.release();
+    
+    return g.getGrid();
   }
   
   private Player getPlayer(int playerId) throws InterruptedException {

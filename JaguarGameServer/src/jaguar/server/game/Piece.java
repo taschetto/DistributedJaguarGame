@@ -1,5 +1,7 @@
 package jaguar.server.game;
 
+import jaguar.common.Direction;
+
 /**
  *
  * @author Guilherme Taschetto

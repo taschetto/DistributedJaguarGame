@@ -1,4 +1,6 @@
-package jaguar.server.game;
+package jaguar.common;
+
+
 
 /**
  *

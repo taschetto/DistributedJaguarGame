@@ -1,4 +1,4 @@
-package jaguar.server.game;
+package jaguar.common;
 
 /**
  *
@@ -22,7 +22,7 @@ public enum Direction {
     this.y = y;
   }  
   
-  Key getNextKey(int x, int y) {
+  public Key getNextKey(int x, int y) {
     int multiplier = x == 6 ? 2 : 1;
     return new Key(x + this.x, y + this.y * multiplier);
   }

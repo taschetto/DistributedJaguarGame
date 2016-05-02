@@ -1,5 +1,6 @@
 package jaguar.server.game;
 
+import jaguar.common.Direction;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;

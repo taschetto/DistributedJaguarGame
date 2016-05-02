@@ -1,5 +1,7 @@
 package jaguar.server.game;
 
+import jaguar.common.Key;
+import jaguar.common.Direction;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
