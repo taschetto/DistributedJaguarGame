@@ -16,12 +16,9 @@ public class JaguarGameClient {
     
     try {
       JaguarGameInterface game = (JaguarGameInterface) Naming.lookup("//"+args[0]+"/JaguarGame");
-      int n = game.registerPlayer("Giuseppe");
-      System.out.println("ID recebido: " + n);
-      n = game.registerPlayer("Alfredo");
-      System.out.println("ID recebido: " + n);
-      n = game.registerPlayer("Alfonso");
-      System.out.println("ID recebido: " + n);
+      int n = game.registerPlayer(args[1]);
+      
+      while(true) {}
       
     } catch (Exception e) {
       System.out.println("JaguarGameClient failed:");

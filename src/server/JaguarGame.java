@@ -2,32 +2,30 @@ package server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.HashMap;
-import java.util.Map;
+import server.util.Game;
+import server.util.GameRegistry;
+import server.util.PlayerRegistry;
 
 /**
  *
  * @author Guilherme Taschetto
  */
 public class JaguarGame extends UnicastRemoteObject implements JaguarGameInterface {
-  private final int MAX_PLAYERS = 100;
-  private Map<String, Player> playerRegistry;
-
+  public static final int MAX_GAMES = 50;
+  public static final int MAX_PLAYERS = MAX_GAMES * 2;
+  
+  private final PlayerRegistry playerRegistry;
+  
   public JaguarGame() throws RemoteException {
-    this.playerRegistry = new HashMap<>();
+    this.playerRegistry = new PlayerRegistry(JaguarGame.MAX_PLAYERS);
   }
 
   @Override
   public int registerPlayer(String playerName) throws RemoteException {
-    
-    if (this.playerRegistry.get(playerName) != null) return -1;
-    if (this.playerRegistry.size() >= MAX_PLAYERS) return -2;
-    
-    Player newPlayer = new Player(this.playerRegistry.size(), playerName);
-    this.playerRegistry.put(playerName, newPlayer);
-    
-    System.out.println("New player registered: " + newPlayer.getName() + " " + newPlayer.getId());
-    
-    return newPlayer.getId();
+    try {
+      return this.playerRegistry.registerPlayer(playerName);
+    } catch (InterruptedException ex) {
+      throw new RemoteException(ex.getMessage());
+    }
   }
 }

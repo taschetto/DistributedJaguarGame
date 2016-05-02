@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
+package server.util;
 
 /**
  *
@@ -12,6 +12,7 @@ package server;
 public class Player {
   private final int id;
   private final String name;
+  private Game game;
 
   public Player(int id, String name) {
     this.id = id;
@@ -25,7 +26,11 @@ public class Player {
   public String getName() {
     return name;
   }
-    
+
+  public void setGame(Game game) {
+    this.game = game;
+  }
+  
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
