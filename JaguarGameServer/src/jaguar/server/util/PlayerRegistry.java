@@ -1,4 +1,4 @@
-package server.util;
+package jaguar.server.util;
 
 import java.util.HashMap;
 import java.util.Map;

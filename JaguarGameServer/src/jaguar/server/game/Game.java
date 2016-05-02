@@ -1,4 +1,4 @@
-package game;
+package jaguar.server.game;
 
 import java.util.ArrayList;
 import java.util.Iterator;
