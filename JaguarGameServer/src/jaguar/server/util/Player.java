@@ -26,9 +26,18 @@ public class Player {
   public String getName() {
     return name;
   }
+  
+  public Game getGame() {
+    return this.game;
+  }
 
   public void setGame(Game game) {
+    System.out.println("Set game with ID " + game.getId() + " to player '" + this.name + "' (ID " + this.id + ").");
     this.game = game;
+    if (!this.game.hasPlayer1())
+      this.game.setPlayer1(this);
+    else
+      this.game.setPlayer2(this);
   }
   
   @Override

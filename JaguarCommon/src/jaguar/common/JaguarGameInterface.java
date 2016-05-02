@@ -9,8 +9,8 @@ import java.rmi.RemoteException;
  */
 public interface JaguarGameInterface extends Remote {
   public int registerPlayer(String playerName) throws RemoteException;
-  /*public int engGame(int playerId) throws RemoteException;
-  public int hasGame(int playerId) throws RemoteException;
+  public int endGame(int playerId) throws RemoteException;
+  /*public int hasGame(int playerId) throws RemoteException;
   public int isMyTurn(int playerId) throws RemoteException;
   public String getGrid(int playerId) throws RemoteException;
   public int sendMove(int playerId, int row, int col, int dir) throws RemoteException;

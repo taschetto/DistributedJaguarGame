@@ -28,6 +28,8 @@ public class GameRegistry {
     this.gameRegistry.add(game);
     mutex.release();
     
+    System.out.println("Created new game with ID " + id + ".");
+    
     return game;
   }
   
@@ -42,5 +44,9 @@ public class GameRegistry {
     mutex.release();
     
     return createGame();
+  }
+  
+  public int endGame(Game g, Player p) {
+    return 0;
   }
 }

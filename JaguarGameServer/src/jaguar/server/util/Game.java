@@ -1,5 +1,7 @@
 package jaguar.server.util;
 
+import jaguar.server.game.Board;
+
 /**
  *
  * @author Guilherme Taschetto
@@ -8,11 +10,13 @@ public class Game {
   private final int id;
   private Player player1;
   private Player player2;
+  private final Board board;
 
   public Game(int id) {
     this.id = id;
     this.player1 = null;
     this.player2 = null;
+    this.board = new Board();
   }
 
   public int getId() {

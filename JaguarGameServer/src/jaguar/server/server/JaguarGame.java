@@ -1,9 +1,13 @@
 package jaguar.server.server;
 
 import jaguar.common.JaguarGameInterface;
+import jaguar.server.util.Game;
+import jaguar.server.util.Player;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import jaguar.server.util.PlayerRegistry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,6 +27,15 @@ public class JaguarGame extends UnicastRemoteObject implements JaguarGameInterfa
   public int registerPlayer(String playerName) throws RemoteException {
     try {
       return this.playerRegistry.registerPlayer(playerName);
+    } catch (InterruptedException ex) {
+      throw new RemoteException(ex.getMessage());
+    }
+  }
+
+  @Override
+  public int endGame(int playerId) throws RemoteException {
+    try {
+      return this.playerRegistry.endGame(playerId);
     } catch (InterruptedException ex) {
       throw new RemoteException(ex.getMessage());
     }
