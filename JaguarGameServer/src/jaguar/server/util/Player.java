@@ -32,12 +32,15 @@ public class Player {
   }
 
   public void setGame(Game game) {
-    System.out.println("Set game with ID " + game.getId() + " to player '" + this.name + "' (ID " + this.id + ").");
     this.game = game;
-    if (!this.game.hasPlayer1())
+    if (!this.game.hasPlayer1()) {
       this.game.setPlayer1(this);
-    else
+      System.out.println("Set player '" + this.name + "' as JAGUAR on game " + game.getId() + ".");
+    }
+    else {
       this.game.setPlayer2(this);
+      System.out.println("Set player '" + this.name + "' as DOGS on game " + game.getId() + ".");
+    }
   }
   
   @Override

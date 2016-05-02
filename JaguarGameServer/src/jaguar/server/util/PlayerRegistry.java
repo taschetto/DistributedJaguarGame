@@ -1,5 +1,6 @@
 package jaguar.server.util;
 
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
@@ -37,10 +38,11 @@ public class PlayerRegistry {
     this.players.put(newPlayer.getId(), newPlayer);
     mutex.release();
     
+    System.out.println("Registered player '" + newPlayer.getName() + "' with ID " + newPlayer.getId() + ".");
+    
     Game g = this.games.getGame();
     newPlayer.setGame(g);
-
-    System.out.println("Registered player '" + newPlayer.getName() + "' with ID " + newPlayer.getId() + ".");
+    
     return newPlayer.getId();
   }
   
@@ -58,7 +60,21 @@ public class PlayerRegistry {
     return this.games.endGame(g, p);
   }
   
-  public Player getPlayer(int playerId) throws InterruptedException {
+  public int hasGame(int playerId) throws InterruptedException {
+    mutex.acquire();
+    Player p = this.players.get(playerId);
+    Game g = p.getGame();
+    mutex.release();
+    
+    if (g.hasPlayer1() && g.hasPlayer2()) {
+      if (g.getPlayer1().equals(p)) return 1;
+      if (g.getPlayer2().equals(p)) return 2;
+      return -1; // Erro
+    }
+    else return 0;
+  }
+  
+  private Player getPlayer(int playerId) throws InterruptedException {
     mutex.acquire();
     Player p = this.players.get(playerId);
     mutex.release();

@@ -1,8 +1,5 @@
 package jaguar.client;
 
-import java.rmi.Naming;
-import jaguar.common.JaguarGameInterface;
-
 /**
  *
  * @author Guilherme Taschetto
@@ -10,19 +7,11 @@ import jaguar.common.JaguarGameInterface;
 public class JaguarGameClient {
   public static void main(String[] args) {
     if (args.length != 2) {
-      System.out.println("Uso: java JaguarGameClient <maquina> <nome>");
+      System.out.println("Usage: java JaguarGameClient <host> <name>");
       System.exit(1);
     }
     
-    try {
-      JaguarGameInterface game = (JaguarGameInterface) Naming.lookup("//"+args[0]+"/JaguarGame");
-      int n = game.registerPlayer(args[1]);
-      
-      while(true) {}
-      
-    } catch (Exception e) {
-      System.out.println("JaguarGameClient failed:");
-      e.printStackTrace();
-    }
+    Game game = new Game(args[0]);
+    game.play(args[1]);
   }
 }

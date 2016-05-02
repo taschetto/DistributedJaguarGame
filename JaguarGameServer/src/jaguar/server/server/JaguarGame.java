@@ -40,4 +40,13 @@ public class JaguarGame extends UnicastRemoteObject implements JaguarGameInterfa
       throw new RemoteException(ex.getMessage());
     }
   }
+
+  @Override
+  public int hasGame(int playerId) throws RemoteException {
+    try {
+      return this.playerRegistry.hasGame(playerId);
+    } catch (InterruptedException ex) {
+      throw new RemoteException(ex.getMessage());
+    }
+  }
 }
