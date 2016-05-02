@@ -1,7 +1,7 @@
-package client;
+package jaguar.client;
 
 import java.rmi.Naming;
-import server.JaguarGameInterface;
+import jaguar.common.JaguarGameInterface;
 
 /**
  *

@@ -26,3 +26,5 @@ nbactions.xml
 hs_err_pid*
 
 /JaguarCommon/nbproject/private/
+/JaguarClient/nbproject/private/
+/JaguarGameServer/nbproject/private/

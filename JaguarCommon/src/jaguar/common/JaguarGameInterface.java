@@ -1,4 +1,4 @@
-package server;
+package jaguar.common;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

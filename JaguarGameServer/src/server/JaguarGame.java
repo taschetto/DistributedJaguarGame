@@ -1,9 +1,8 @@
 package server;
 
+import jaguar.common.JaguarGameInterface;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import server.util.Game;
-import server.util.GameRegistry;
 import server.util.PlayerRegistry;
 
 /**
