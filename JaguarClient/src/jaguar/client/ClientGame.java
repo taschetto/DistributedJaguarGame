@@ -5,6 +5,9 @@ import jaguar.common.JaguarGameInterface;
 import jaguar.common.PlayerType;
 import java.rmi.Naming;
 import static java.lang.Thread.sleep;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 /**
@@ -94,7 +97,7 @@ public class ClientGame {
   }
   
   private void yourTurn() throws InterruptedException {
-    Direction d = promptForDirection();
+    
     sleep(1000);
   }
   
@@ -111,7 +114,18 @@ public class ClientGame {
     System.out.println("You lose.");
   }
   
-public Direction promptForDirection() {
+  private void doJaguarPlay() throws RemoteException {
+    Direction d = promptForDirection();
+    this.remoteGame.sendMove(this.playerId, -1, d);
+  }
+  
+  private void doDogPlay() throws RemoteException {
+    int dog = promptForDog();
+    Direction d = promptForDirection();
+    this.remoteGame.sendMove(this.playerId, dog, d);
+  }
+  
+  private Direction promptForDirection() {
     StringBuilder output = new StringBuilder("Which way you wanna go?\n\t");
 
     Direction[] directions = Direction.values();
@@ -144,5 +158,25 @@ public Direction promptForDirection() {
     }
 
     return dir;
+  }
+  
+  public int promptForDog() {
+    StringBuilder output = new StringBuilder("Which doge you wanna move?\n\t");
+    
+    for (int i = 1; i <= 14; i++) {
+      output.append(i);
+      if (i < 14) output.append(", ");
+    }
+
+    output.append("\n >> ");
+
+    int playerChoice = 0;
+
+    while (playerChoice < 1 || playerChoice > 14) {
+      System.out.print(output.toString());
+      playerChoice = Integer.parseInt(new Scanner(System.in).next());
+    }
+
+    return playerChoice;
   }
 }

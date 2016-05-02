@@ -1,5 +1,6 @@
 package jaguar.server.util;
 
+import jaguar.common.Direction;
 import jaguar.common.PlayerType;
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -103,6 +104,19 @@ public class PlayerRegistry {
     mutex.release();
     
     return g.getGrid();
+  }
+  
+  public int sendMove(int playerId, int dogId, Direction direction) throws InterruptedException {
+  /* Retorna: 2 (partida encerrada, o que ocorrerá caso o jogador demore muito para enviar a sua
+jogada e ocorra o time­out de 30 segundos para envio de jogadas), 1 (tudo certo), 0 (movimento
+inválido) ou ­1 (erro). */
+  
+    mutex.acquire();
+    Player p = this.players.get(playerId);
+    Game g = p.getGame();
+    mutex.release();
+    
+    return 0;
   }
   
   private Player getPlayer(int playerId) throws InterruptedException {

@@ -1,5 +1,6 @@
 package jaguar.server.server;
 
+import jaguar.common.Direction;
 import jaguar.common.JaguarGameInterface;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -59,6 +60,15 @@ public class JaguarGame extends UnicastRemoteObject implements JaguarGameInterfa
   public int isMyTurn(int playerId) throws RemoteException {
     try {
       return this.playerRegistry.isMyTurn(playerId);
+    } catch (InterruptedException ex) {
+      throw new RemoteException(ex.getMessage());
+    }
+  }
+
+  @Override
+  public int sendMove(int playerId, int dogId, Direction direction) throws RemoteException {
+    try {
+      return this.playerRegistry.sendMove(playerId, dogId, direction);
     } catch (InterruptedException ex) {
       throw new RemoteException(ex.getMessage());
     }
