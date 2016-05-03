@@ -4,7 +4,7 @@ import jaguar.common.Direction;
 import jaguar.common.JaguarGameInterface;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import jaguar.server.util.PlayerRegistry;
+import jaguar.server.util.GameManager;
 
 /**
  *
@@ -14,16 +14,16 @@ public class JaguarGame extends UnicastRemoteObject implements JaguarGameInterfa
   public static final int MAX_GAMES = 50;
   public static final int MAX_PLAYERS = MAX_GAMES * 2;
   
-  private final PlayerRegistry playerRegistry;
+  private final GameManager manager;
   
   public JaguarGame() throws RemoteException {
-    this.playerRegistry = new PlayerRegistry(JaguarGame.MAX_PLAYERS);
+    this.manager = new GameManager(JaguarGame.MAX_PLAYERS);
   }
 
   @Override
   public int registerPlayer(String playerName) throws RemoteException {
     try {
-      return this.playerRegistry.registerPlayer(playerName);
+      return this.manager.registerPlayer(playerName);
     } catch (InterruptedException ex) {
       throw new RemoteException(ex.getMessage());
     }
@@ -32,7 +32,7 @@ public class JaguarGame extends UnicastRemoteObject implements JaguarGameInterfa
   @Override
   public int endGame(int playerId) throws RemoteException {
     try {
-      return this.playerRegistry.endGame(playerId);
+      return this.manager.endGame(playerId);
     } catch (InterruptedException ex) {
       throw new RemoteException(ex.getMessage());
     }
@@ -41,7 +41,7 @@ public class JaguarGame extends UnicastRemoteObject implements JaguarGameInterfa
   @Override
   public int hasGame(int playerId) throws RemoteException {
     try {
-      return this.playerRegistry.hasGame(playerId);
+      return this.manager.hasGame(playerId);
     } catch (InterruptedException ex) {
       throw new RemoteException(ex.getMessage());
     }
@@ -50,7 +50,7 @@ public class JaguarGame extends UnicastRemoteObject implements JaguarGameInterfa
   @Override
   public String getGrid(int playerId) throws RemoteException {
     try {
-      return this.playerRegistry.getGrid(playerId);
+      return this.manager.getGrid(playerId);
     } catch (InterruptedException ex) {
       throw new RemoteException(ex.getMessage());
     }
@@ -59,7 +59,7 @@ public class JaguarGame extends UnicastRemoteObject implements JaguarGameInterfa
   @Override
   public int isMyTurn(int playerId) throws RemoteException {
     try {
-      return this.playerRegistry.isMyTurn(playerId);
+      return this.manager.isMyTurn(playerId);
     } catch (InterruptedException ex) {
       throw new RemoteException(ex.getMessage());
     }
@@ -68,7 +68,16 @@ public class JaguarGame extends UnicastRemoteObject implements JaguarGameInterfa
   @Override
   public int sendMove(int playerId, int dogId, Direction direction) throws RemoteException {
     try {
-      return this.playerRegistry.sendMove(playerId, dogId, direction);
+      return this.manager.sendMove(playerId, dogId, direction);
+    } catch (InterruptedException ex) {
+      throw new RemoteException(ex.getMessage());
+    }
+  }
+
+  @Override
+  public String getOpponent(int playerId) throws RemoteException {
+    try {
+      return this.manager.getOpponent(playerId);
     } catch (InterruptedException ex) {
       throw new RemoteException(ex.getMessage());
     }

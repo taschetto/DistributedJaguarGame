@@ -19,10 +19,10 @@ public class Game {
   public void play() {
     while(true) {
       System.out.println(board.toString());
-      if (board.verifyDogsVictory()) break;
+      if (board.isDogsWinner()) break;
       player1();
       System.out.println(board.toString());
-      if (board.verifyJaguarVictory()) break;
+      if (board.isJaguarWinner()) break;
       player2();
     }
   }

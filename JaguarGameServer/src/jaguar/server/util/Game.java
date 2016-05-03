@@ -26,27 +26,27 @@ public class Game {
     return id;
   }
 
-  public Player getPlayer1() {
+  public Player getJaguar() {
     return player1;
   }
 
-  public Player getPlayer2() {
+  public Player getDogs() {
     return player2;
   }
 
-  public void setPlayer1(Player player1) {
+  public void setJaguar(Player player1) {
     this.player1 = player1;
   }
 
-  public void setPlayer2(Player player2) {
+  public void setDogs(Player player2) {
     this.player2 = player2;
   }
   
-  public boolean hasPlayer1() {
+  public boolean hasJaguar() {
     return this.player1 != null;
   }
   
-  public boolean hasPlayer2() {
+  public boolean hasDogs() {
     return this.player2 != null;
   }
     
@@ -54,26 +54,26 @@ public class Game {
     return this.board.toString();
   }
   
-  public boolean isPlayer1(Player player) {
+  public boolean isJaguar(Player player) {
     if (player == null || this.player1 == null) return false;
     return this.player1.equals(player);
   }
   
-  public boolean isPlayer2(Player player) {
+  public boolean isDogs(Player player) {
     if (player == null || this.player2 == null) return false;
     return this.player2.equals(player);
   }
   
-  public boolean isPlayer1Winner() {
-    return this.board.verifyJaguarVictory();
+  public boolean isJaguarWinner() {
+    return this.board.isJaguarWinner();
   }
   
-  public boolean isPlayer2Winner() {
-    return this.board.verifyDogsVictory();
+  public boolean isDogsWinner() {
+    return this.board.isDogsWinner();
   }
   
   public boolean hasWinner() {
-    return isPlayer1Winner() || isPlayer2Winner();
+    return isJaguarWinner() || isDogsWinner();
   }
   
   public PlayerType getTurn() {

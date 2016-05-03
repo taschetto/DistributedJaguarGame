@@ -95,13 +95,13 @@ public class Board {
     return ids;
   }
   
-  public boolean verifyDogsVictory() {
+  public boolean isDogsWinner() {
     // Para os cães ganharem o jogo, a onça precisa não ter nenhum movimento
     // válido à partir da sua posição atual.
     return !hasAnyMoves(this.jaguar);
   }
   
-  public boolean verifyJaguarVictory() {
+  public boolean isJaguarWinner() {
     // Para a onça ganhar o jogo, basta ter comido 5 cães.
     return dogs.size() < 10;
   }

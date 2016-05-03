@@ -8,13 +8,13 @@ import java.util.concurrent.Semaphore;
  *
  * @author Guilherme Taschetto
  */
-public class GameRegistry {
+public class GameCreator {
   private final Set<Game> gameRegistry;
   
   private int nextGameId = 0;
   private Semaphore mutex = new Semaphore(1);
 
-  public GameRegistry() {
+  public GameCreator() {
     this.gameRegistry = new HashSet<>();
   }
   
@@ -36,7 +36,7 @@ public class GameRegistry {
   public Game getGame() throws InterruptedException {
     mutex.acquire();
     for (Game game : this.gameRegistry) {
-      if (!game.hasPlayer1() || !game.hasPlayer2()) {
+      if (!game.hasJaguar() || !game.hasDogs()) {
         mutex.release();
         return game;
       }
@@ -44,9 +44,5 @@ public class GameRegistry {
     mutex.release();
     
     return createGame();
-  }
-  
-  public int endGame(Game g, Player p) {
-    return 0;
   }
 }

@@ -4,11 +4,9 @@ import jaguar.common.Direction;
 import jaguar.common.JaguarGameInterface;
 import jaguar.common.PlayerType;
 import java.rmi.Naming;
-import static java.lang.Thread.sleep;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Scanner;
+import static java.lang.Thread.sleep;
 
 /**
  *
@@ -19,6 +17,7 @@ public class ClientGame {
   private JaguarGameInterface remoteGame;
   private int playerId;
   private PlayerType playerType;
+  private String opponentName;
   
   public ClientGame(String serverName) {
     try {
@@ -29,80 +28,80 @@ public class ClientGame {
     }
   }
   
-  public void play(String playerName) {
+  public void start(String playerName) {
     try {
-      int n = remoteGame.registerPlayer(playerName);
+      this.registerPlayer(playerName);
+      this.waitForGame();
+      this.play();
       
-      if (n == -1) {
-        System.out.println("Player '" + playerName  + "' already registered.");
-        return;
-      }
-
-      if (n == -2) {
-        System.out.println("Reached max number of registered players.");
-        return;
-      }
-      
-      if (n < -1) {
-        System.out.println("Unknown error.");
-        return;
-      }
-      
-      this.playerId = n;
-      
-      int hasGame = 0;
-      while((hasGame = this.remoteGame.hasGame(this.playerId)) <= 0) {
-        System.out.println("Waiting for opponent match...");
-        sleep(1000);
-      }
-      
-      System.out.println("Found oponent!");
-      
-      if (hasGame == 1) {
-        System.out.println("You are the JAGUAR!");
-        this.playerType = PlayerType.Jaguar;
-      }
-      else {
-        System.out.println("You are the DOGS!");
-        this.playerType = PlayerType.Dog;
-      }
-      
-      System.out.println(this.remoteGame.getGrid(playerId));
-      
-      int isMyTurn = this.remoteGame.isMyTurn(this.playerId);
-      while(isMyTurn == 0 || isMyTurn == 1) {
-        switch(isMyTurn) {
-          case -1: error(); break;
-          case 0: oponnentTurn(); break;
-          case 1: yourTurn(); break;
-          case 2: youWin(); break;
-          case 3: youLose(); break;
-          case 4: error(); break;
-          case 5: error(); break;
-          case 6: error(); break;
-          default: error(); break;
-        }
-        
-        isMyTurn = this.remoteGame.isMyTurn(this.playerId);
-        System.out.println("\n" + this.remoteGame.getGrid(this.playerId));
-      }
     } catch (Exception e) {
       System.out.println("JaguarGameClient failed:");
       e.printStackTrace();
     }
   }
   
-  private void error() throws Exception {
-    throw new Exception("Unknown error");
+  private void registerPlayer(String playerName) throws RemoteException, Exception {
+    int id = remoteGame.registerPlayer(playerName);
+      
+    if (id == -1) throw new Exception("Player '" + playerName  + "' already registered.");
+    if (id == -2) throw new Exception("Reached max number of registered players.");
+    if (id < 0)   throw new Exception("Unknown error");
+
+    this.playerId = id;
   }
   
-  private void yourTurn() throws InterruptedException {
+  private void waitForGame() throws RemoteException, InterruptedException {
+    System.out.print("Waiting for opponent match...");
+    int hasGame = 0;
+    while((hasGame = this.remoteGame.hasGame(this.playerId)) <= 0) {
+      sleep(1000);
+      System.out.print(".");
+    }
     
-    sleep(1000);
+    this.opponentName = this.remoteGame.getOpponent(this.playerId);
+    System.out.println("\nFound opponent! His name is " + this.opponentName + ".\n");
+    
+    if (hasGame == 1) {
+      System.out.println("You are the JAGUAR!");
+      this.playerType = PlayerType.Jaguar;
+    }
+    else {
+      System.out.println("You are the DOGS!");
+      this.playerType = PlayerType.Dog;
+    }
+  }
+  
+  private void showGrid() throws RemoteException {
+    System.out.println(this.remoteGame.getGrid(this.playerId));
+  }
+  
+  private void play() throws RemoteException, Exception {
+    int isMyTurn = this.remoteGame.isMyTurn(this.playerId);
+    while(isMyTurn == 0 || isMyTurn == 1) {
+      switch(isMyTurn) {
+        case -1: throw new Exception("Unknown error");
+        case 0: oponnentTurn(); break;
+        case 1: yourTurn(); break;
+        case 2: youWin(); break;
+        case 3: youLose(); break;
+        case 4: throw new Exception("Unknown error");
+        case 5: throw new Exception("Unknown error");
+        case 6: throw new Exception("Unknown error");
+        default: throw new Exception("Unknown error");
+      }
+
+      isMyTurn = this.remoteGame.isMyTurn(this.playerId);
+    }
+  }
+  
+  private void yourTurn() throws InterruptedException, RemoteException {
+    System.out.println("\n" + this.remoteGame.getGrid(this.playerId));
+    if (this.playerType == PlayerType.Jaguar) doJaguarPlay();
+    else doDogPlay();
   }
   
   private void oponnentTurn() throws InterruptedException {
-    System.out.println("It's opponent's turn.");
+    System.out.println("Waiting for " + this.opponentName + " to play.");
     sleep(1000);
   }
   
@@ -115,14 +114,25 @@ public class ClientGame {
   }
   
   private void doJaguarPlay() throws RemoteException {
-    Direction d = promptForDirection();
-    this.remoteGame.sendMove(this.playerId, -1, d);
+    int x = 0;
+    
+    while (x == 0) {
+      x = this.remoteGame.sendMove(this.playerId, -1, promptForDirection());
+      if (x == 0) {
+        System.out.println("Invalid movement. Try again.");
+      }
+    }
   }
   
   private void doDogPlay() throws RemoteException {
-    int dog = promptForDog();
-    Direction d = promptForDirection();
-    this.remoteGame.sendMove(this.playerId, dog, d);
+    int x = 0;
+    
+    while (x == 0) {
+      x = this.remoteGame.sendMove(this.playerId, promptForDog(), promptForDirection());
+      if (x == 0) {
+        System.out.println("Invalid movement. Try again.");
+      }
+    }
   }
   
   private Direction promptForDirection() {

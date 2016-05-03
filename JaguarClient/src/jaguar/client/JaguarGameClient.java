@@ -12,6 +12,6 @@ public class JaguarGameClient {
     }
     
     ClientGame game = new ClientGame(args[0]);
-    game.play(args[1]);
+    game.start(args[1]);
   }
 }

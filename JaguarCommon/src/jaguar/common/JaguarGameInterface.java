@@ -14,5 +14,5 @@ public interface JaguarGameInterface extends Remote {
   public int isMyTurn(int playerId) throws RemoteException;
   public String getGrid(int playerId) throws RemoteException;
   public int sendMove(int playerId, int dogId, Direction direction) throws RemoteException;
-  // public String getOpponent(int playerId) throws RemoteException;
+  public String getOpponent(int playerId) throws RemoteException;
 }

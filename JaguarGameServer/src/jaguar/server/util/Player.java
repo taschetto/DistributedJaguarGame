@@ -33,12 +33,12 @@ public class Player {
 
   public void setGame(Game game) {
     this.game = game;
-    if (!this.game.hasPlayer1()) {
-      this.game.setPlayer1(this);
+    if (!this.game.hasJaguar()) {
+      this.game.setJaguar(this);
       System.out.println("Set player '" + this.name + "' as JAGUAR on game " + game.getId() + ".");
     }
     else {
-      this.game.setPlayer2(this);
+      this.game.setDogs(this);
       System.out.println("Set player '" + this.name + "' as DOGS on game " + game.getId() + ".");
     }
   }
