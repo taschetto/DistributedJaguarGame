@@ -45,4 +45,12 @@ public class GameCreator {
     
     return createGame();
   }
+  
+  public void endGame(Game g) throws InterruptedException {
+    mutex.acquire();
+    this.gameRegistry.remove(g);
+    mutex.release();
+    
+    System.out.println("Remove game " + g.getId() + " from registry due to lack of players.");
+  }
 }

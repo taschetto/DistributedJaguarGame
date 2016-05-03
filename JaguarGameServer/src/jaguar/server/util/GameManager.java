@@ -2,6 +2,7 @@ package jaguar.server.util;
 
 import jaguar.common.Direction;
 import jaguar.common.PlayerType;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
@@ -11,6 +12,8 @@ import java.util.concurrent.Semaphore;
  * @author Guilherme Taschetto
  */
 public class GameManager {
+  
+  private static final int WAIT_FOR_GAME = 1000 * 60 * 2; // 2 minutes
   
   private final Map<Integer, Player> players;
   private final int maxPlayers;
@@ -54,6 +57,13 @@ public class GameManager {
     if (p == null) return -1;
     Game g = p.getGame();
     if (g == null) return -1;
+    
+    Date now = new Date();
+    if (now.getTime() - g.getCreatedAt().getTime() > WAIT_FOR_GAME) {
+      this.games.endGame(g);
+      this.unregisterPlayer(playerId);
+      return -2;
+    }
     
     if (g.hasJaguar() && g.hasDogs()) {
       if (g.getJaguar().equals(p)) return 1; // Player is JAGUAR!
@@ -119,6 +129,12 @@ public class GameManager {
     mutex.release();
     return p;
   }
+  
+  private void removePlayer(int playerId) throws InterruptedException {
+    mutex.acquire();
+    this.players.remove(playerId);
+    mutex.release();
+  }
     
   private boolean isPlayerRegistered(String playerName) throws InterruptedException {
     for (Map.Entry<Integer, Player> p : this.players.entrySet()) {
@@ -133,5 +149,11 @@ public class GameManager {
     mutex.release();
     
     return size >= this.maxPlayers;
+  }
+  
+  private void unregisterPlayer(int playerId) throws InterruptedException {
+    Player p = getPlayer(playerId);
+    removePlayer(playerId);
+    System.out.println("Unregistered player '" + p.getName() + "' due to lack of opponents.");
   }
 }

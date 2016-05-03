@@ -53,9 +53,13 @@ public class ClientGame {
   private void waitForGame() throws RemoteException, InterruptedException {
     System.out.print("Waiting for opponent match...");
     int hasGame = 0;
-    while((hasGame = this.remoteGame.hasGame(this.playerId)) <= 0) {
-      sleep(1000);
+    while((hasGame = this.remoteGame.hasGame(this.playerId)) == 0) {
+      sleep(500);
       System.out.print(".");
+    }
+    
+    if (hasGame == -2) {
+      throw new RemoteException("Timeout whilst waiting for an opponent!");
     }
     
     this.opponentName = this.remoteGame.getOpponent(this.playerId);

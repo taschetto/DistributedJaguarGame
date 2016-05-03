@@ -4,6 +4,7 @@ import jaguar.common.Direction;
 import jaguar.common.PlayerType;
 import jaguar.server.game.Board;
 import jaguar.server.game.Piece;
+import java.util.Date;
 
 /**
  *
@@ -15,6 +16,7 @@ public class Game {
   private Player player2;
   private final Board board;
   private PlayerType turn;
+  private Date createdAt;
 
   public Game(int id) {
     this.id = id;
@@ -22,6 +24,7 @@ public class Game {
     this.player2 = null;
     this.board = new Board();
     this.turn = PlayerType.Jaguar;
+    this.createdAt = new Date();
   }
 
   public int getId() {
@@ -36,6 +39,10 @@ public class Game {
     return player2;
   }
 
+  public Date getCreatedAt() {
+    return this.createdAt;
+  }
+  
   public void setJaguar(Player player1) {
     this.player1 = player1;
   }
