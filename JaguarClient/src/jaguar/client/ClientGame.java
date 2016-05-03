@@ -30,7 +30,7 @@ public class ClientGame {
   
   public void start(String playerName) {
     try {
-      this.registerPlayer(playerName);
+      this.register(playerName);
       this.waitForGame();
       this.play();
       
@@ -40,7 +40,7 @@ public class ClientGame {
     }
   }
   
-  private void registerPlayer(String playerName) throws RemoteException, Exception {
+  private void register(String playerName) throws RemoteException, Exception {
     int id = remoteGame.registerPlayer(playerName);
       
     if (id == -1) throw new Exception("Player '" + playerName  + "' already registered.");
@@ -76,60 +76,55 @@ public class ClientGame {
   }
   
   private void play() throws RemoteException, Exception {
-    int isMyTurn = this.remoteGame.isMyTurn(this.playerId);
+    int isMyTurn = 0;
     while(isMyTurn == 0 || isMyTurn == 1) {
+      isMyTurn = this.remoteGame.isMyTurn(this.playerId);
       switch(isMyTurn) {
         case -1: throw new Exception("Unknown error");
-        case 0: oponnentTurn(); break;
-        case 1: yourTurn(); break;
-        case 2: youWin(); break;
-        case 3: youLose(); break;
+        case 0: theirTurn(); break;
+        case 1: myTurn(); break;
+        case 2: myWin(); break;
+        case 3: theirWin(); break;
         case 4: throw new Exception("Unknown error");
         case 5: throw new Exception("Unknown error");
         case 6: throw new Exception("Unknown error");
         default: throw new Exception("Unknown error");
       }
-
-      isMyTurn = this.remoteGame.isMyTurn(this.playerId);
     }
   }
   
-  private void yourTurn() throws InterruptedException, RemoteException {
+  private void myTurn() throws InterruptedException, RemoteException {
     System.out.println("\n" + this.remoteGame.getGrid(this.playerId));
     if (this.playerType == PlayerType.Jaguar) doJaguarPlay();
     else doDogPlay();
   }
   
-  private void oponnentTurn() throws InterruptedException {
+  private void theirTurn() throws InterruptedException {
     System.out.println("Waiting for " + this.opponentName + " to play.");
     sleep(1000);
   }
   
-  private void youWin() throws InterruptedException {
+  private void myWin() throws InterruptedException {
     System.out.println("You win.");
   }
   
-  private void youLose() throws InterruptedException {
+  private void theirWin() throws InterruptedException {
     System.out.println("You lose.");
   }
   
   private void doJaguarPlay() throws RemoteException {
-    int x = 0;
-    
-    while (x == 0) {
-      x = this.remoteGame.sendMove(this.playerId, -1, promptForDirection());
-      if (x == 0) {
+    int moveResult;
+    while ((moveResult = this.remoteGame.sendMove(this.playerId, -1, promptForDirection())) == 0) {
+      if (moveResult == 0) {
         System.out.println("Invalid movement. Try again.");
       }
     }
   }
   
   private void doDogPlay() throws RemoteException {
-    int x = 0;
-    
-    while (x == 0) {
-      x = this.remoteGame.sendMove(this.playerId, promptForDog(), promptForDirection());
-      if (x == 0) {
+    int moveResult;    
+    while ((moveResult = this.remoteGame.sendMove(this.playerId, promptForDog(), promptForDirection())) == 0) {
+      if (moveResult == 0) {
         System.out.println("Invalid movement. Try again.");
       }
     }
