@@ -1,7 +1,9 @@
 package jaguar.server.util;
 
+import jaguar.common.Direction;
 import jaguar.common.PlayerType;
 import jaguar.server.game.Board;
+import jaguar.server.game.Piece;
 
 /**
  *
@@ -78,5 +80,21 @@ public class Game {
   
   public PlayerType getTurn() {
     return this.turn;
+  }
+  
+  public int moveJaguar(Direction direction) {
+    Piece jaguar = this.board.getJaguar();
+    if (!this.board.canMove(jaguar, direction)) return 0;
+    this.board.move(jaguar, direction);
+    this.turn = PlayerType.Dog;
+    return 1;
+  }
+  
+  public int moveDog(int dogId, Direction direction) {
+    Piece dog = this.board.getDog(dogId);
+    if (!this.board.canMove(dog, direction)) return 0;
+    this.board.move(dog, direction);
+    this.turn = PlayerType.Jaguar;
+    return 1;
   }
 }

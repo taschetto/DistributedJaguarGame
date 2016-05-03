@@ -24,15 +24,8 @@ public class GameManager {
   }
   
   public int registerPlayer(String playerName) throws InterruptedException {
-    if (isPlayerRegistered(playerName)) {
-      System.out.println("Player '" + playerName  + "' already registered.");
-      return -1;
-    }
-    
-    if (isMaxPlayersReached()) {
-      System.out.println("Reached max number of registered players.");
-      return -2;
-    }
+    if (isPlayerRegistered(playerName)) return -1;
+    if (isMaxPlayersReached()) return -2;
 
     mutex.acquire();
     Player newPlayer = new Player(this.players.size(), playerName);
@@ -49,81 +42,73 @@ public class GameManager {
   
   public int endGame(int playerId) throws InterruptedException {
     Player p = getPlayer(playerId);
-    if (p == null) {
-      System.out.println("Could find player with ID " + playerId + ".");
-      return -1;
-    }
+    if (p == null) return -1;
     Game g = p.getGame();
-    if (g == null) {
-      System.out.println("Could find game for player with ID " + playerId + ".");
-      return -1;
-    }
+    if (g == null) return -1;
+
     return 0;
   }
   
   public int hasGame(int playerId) throws InterruptedException {
-    mutex.acquire();
-    Player p = this.players.get(playerId);
+    Player p = this.getPlayer(playerId);
+    if (p == null) return -1;
     Game g = p.getGame();
-    mutex.release();
+    if (g == null) return -1;
     
     if (g.hasJaguar() && g.hasDogs()) {
-      if (g.getJaguar().equals(p)) return 1;
-      if (g.getDogs().equals(p)) return 2;
-      return -1; // Erro
+      if (g.getJaguar().equals(p)) return 1; // Player is JAGUAR!
+      if (g.getDogs().equals(p)) return 2; // Player is DOGS!
+      return -1; // Unexpected error :(
     }
-    else return 0;
+    
+    return 0; // No game available yet.
   }
   
   public int isMyTurn(int playerId) throws InterruptedException {
-    mutex.acquire();
-    Player p = this.players.get(playerId);
+    Player p = this.getPlayer(playerId);
+    if (p == null) return -1;
     Game g = p.getGame();
-    mutex.release();
-    
-    if (!g.hasJaguar() || !g.hasDogs()) return -1; // Erro
+    if (g == null) return -1;
     
     if (g.isJaguar(p)) {
       if (g.isJaguarWinner()) return 2;
       if (g.isDogsWinner()) return 3;
       if (g.getTurn() == PlayerType.Jaguar) return 1;
-      else return 0;      
+      else return 0;
     } else if (g.isDogs(p)) {
       if (g.isJaguarWinner()) return 3;
       if (g.isDogsWinner()) return 2;      
       if (g.getTurn() == PlayerType.Dog) return 1;
       else return 0;
-    } else return -1; // Erro
+    } else return -1; // Error :(
   }
   
   public String getGrid(int playerId) throws InterruptedException {
-    mutex.acquire();
-    Player p = this.players.get(playerId);
+    Player p = this.getPlayer(playerId);
+    if (p == null) return "";
     Game g = p.getGame();
-    mutex.release();
+    if (g == null) return "";
     
     return g.getGrid();
   }
   
   public int sendMove(int playerId, int dogId, Direction direction) throws InterruptedException {
-  /* Retorna: 2 (partida encerrada, o que ocorrerá caso o jogador demore muito para enviar a sua
-jogada e ocorra o time­out de 30 segundos para envio de jogadas), 1 (tudo certo), 0 (movimento
-inválido) ou ­1 (erro). */
-  
-    mutex.acquire();
-    Player p = this.players.get(playerId);
+    Player p = this.getPlayer(playerId);
+    if (p == null) return -1;
     Game g = p.getGame();
-    mutex.release();
+    if (g == null) return -1;
     
-    return 0;
+    if (g.isJaguar(p) && g.getTurn() == PlayerType.Jaguar) return g.moveJaguar(direction);
+    if (g.isDogs(p) && g.getTurn() == PlayerType.Dog) return g.moveDog(dogId, direction);
+    
+    return -1; // Erro
   }
   
   public String getOpponent(int playerId) throws InterruptedException {
-    mutex.acquire();
-    Player p = this.players.get(playerId);
+    Player p = this.getPlayer(playerId);
+    if (p == null) return "";
     Game g = p.getGame();
-    mutex.release();
-    
+    if (g == null) return "";
     if (g.isJaguar(p)) return g.getDogs().getName();
     else return g.getJaguar().getName();
   }
@@ -132,7 +117,6 @@ inválido) ou ­1 (erro). */
     mutex.acquire();
     Player p = this.players.get(playerId);
     mutex.release();
-    
     return p;
   }
     
