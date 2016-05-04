@@ -18,10 +18,12 @@ public class ClientGame {
   private int playerId;
   private PlayerType playerType;
   private String opponentName;
+  private boolean gameEnded;
   
   public ClientGame(String serverName) {
     try {
       this.remoteGame = (JaguarGameInterface) Naming.lookup("//" + serverName + "/JaguarGame");
+      this.gameEnded = false;
     } catch (Exception e) {
       System.out.println("JaguarGameClient failed:");
       e.printStackTrace();
@@ -35,7 +37,7 @@ public class ClientGame {
       this.play();
       
     } catch (Exception e) {
-      System.out.println("JaguarGameClient failed:");
+      System.out.println("\nJaguarGameClient failed:");
       e.printStackTrace();
     }
   }
@@ -48,6 +50,8 @@ public class ClientGame {
     if (id < 0)   throw new Exception("Unknown error");
 
     this.playerId = id;
+    
+    System.out.println("Registered with ID " + this.playerId + ".");
   }
   
   private void waitForGame() throws RemoteException, InterruptedException {
@@ -59,7 +63,7 @@ public class ClientGame {
     }
     
     if (hasGame == -2) {
-      throw new RemoteException("Timeout whilst waiting for an opponent!");
+      throw new RemoteException("Matchmaking timeout occured.");
     }
     
     this.opponentName = this.remoteGame.getOpponent(this.playerId);
@@ -69,7 +73,7 @@ public class ClientGame {
       System.out.println("You are the JAGUAR!");
       this.playerType = PlayerType.Jaguar;
     }
-    else {
+    else if (hasGame == 2) {
       System.out.println("You are the DOGS!");
       this.playerType = PlayerType.Dog;
     }
@@ -87,13 +91,15 @@ public class ClientGame {
         case -1: throw new Exception("Unknown error");
         case 0: theirTurn(); break;
         case 1: myTurn(); break;
-        case 2: myWin(); break;
-        case 3: theirWin(); break;
+        case 2: winner(); break;
+        case 3: loser(); break;
         case 4: throw new Exception("Unknown error");
-        case 5: throw new Exception("Unknown error");
-        case 6: throw new Exception("Unknown error");
+        case 5: winnerByWO(); break;
+        case 6: loserByWO(); break;
         default: throw new Exception("Unknown error");
       }
+      
+      if (this.gameEnded) return;
     }
   }
   
@@ -108,12 +114,24 @@ public class ClientGame {
     sleep(1000);
   }
   
-  private void myWin() throws InterruptedException {
+  private void winner() throws InterruptedException {
     System.out.println("You win.");
+    this.gameEnded = true;
   }
   
-  private void theirWin() throws InterruptedException {
+  private void loser() throws InterruptedException {
     System.out.println("You lose.");
+    this.gameEnded = true;
+  }
+  
+  private void winnerByWO() throws InterruptedException {
+    System.out.println("You win by WO.");
+    this.gameEnded = true;
+  }
+  
+  private void loserByWO() throws InterruptedException {
+    System.out.println("You lose by WO.");
+    this.gameEnded = true;
   }
   
   private void doJaguarPlay() throws RemoteException {
@@ -123,6 +141,9 @@ public class ClientGame {
         System.out.println("Invalid movement. Try again.");
       }
     }
+
+    if (moveResult == -1)
+      throw new RemoteException("Unexpected error.");    
   }
   
   private void doDogPlay() throws RemoteException {
@@ -132,6 +153,9 @@ public class ClientGame {
         System.out.println("Invalid movement. Try again.");
       }
     }
+    
+    if (moveResult == -1)
+      throw new RemoteException("Unexpected error.");
   }
   
   private Direction promptForDirection() {

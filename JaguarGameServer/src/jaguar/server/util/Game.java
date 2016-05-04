@@ -11,12 +11,18 @@ import java.util.Date;
  * @author Guilherme Taschetto
  */
 public class Game {
+  private static final int MOVE_TIMEOUT = 10 * 1000; // 30 seconds
+  private static final int MATCHMAKING_TIMEOUT = 1000 * 60 * 2; // 2 minutes
+
   private final int id;
   private Player player1;
   private Player player2;
   private final Board board;
   private PlayerType turn;
   private Date createdAt;
+  private Date lastPlayAt;
+  private PlayerType winner;
+  private boolean winnerByTimeout;
 
   public Game(int id) {
     this.id = id;
@@ -25,37 +31,42 @@ public class Game {
     this.board = new Board();
     this.turn = PlayerType.Jaguar;
     this.createdAt = new Date();
+    this.lastPlayAt = null;
+    this.winner = null;
+    this.winnerByTimeout = false;
   }
 
   public int getId() {
     return id;
   }
 
-  public Player getJaguar() {
+  public Player getPlayer1() {
     return player1;
   }
 
-  public Player getDogs() {
+  public Player getPlayer2() {
     return player2;
   }
 
-  public Date getCreatedAt() {
-    return this.createdAt;
+  public boolean isWinnerByTimeout() {
+    return this.winnerByTimeout;
   }
   
-  public void setJaguar(Player player1) {
+  public void setPlayer1(Player player1) {
     this.player1 = player1;
+    this.lastPlayAt = new Date();
   }
 
-  public void setDogs(Player player2) {
+  public void setPlayer2(Player player2) {
     this.player2 = player2;
+    this.lastPlayAt = new Date();
   }
   
-  public boolean hasJaguar() {
+  public boolean hasPlayer1() {
     return this.player1 != null;
   }
   
-  public boolean hasDogs() {
+  public boolean hasPlayer2() {
     return this.player2 != null;
   }
     
@@ -63,12 +74,12 @@ public class Game {
     return this.board.toString();
   }
   
-  public boolean isJaguar(Player player) {
+  public boolean isPlayer1(Player player) {
     if (player == null || this.player1 == null) return false;
     return this.player1.equals(player);
   }
   
-  public boolean isDogs(Player player) {
+  public boolean isPlayer2(Player player) {
     if (player == null || this.player2 == null) return false;
     return this.player2.equals(player);
   }
@@ -81,27 +92,86 @@ public class Game {
     return this.board.isDogsWinner();
   }
   
-  public boolean hasWinner() {
-    return isJaguarWinner() || isDogsWinner();
-  }
-  
   public PlayerType getTurn() {
     return this.turn;
   }
   
-  public int moveJaguar(Direction direction) {
-    Piece jaguar = this.board.getJaguar();
-    if (!this.board.canMove(jaguar, direction)) return 0;
-    this.board.move(jaguar, direction);
-    this.turn = PlayerType.Dog;
+  private void checkWinner() {
+    if (this.board.isJaguarWinner()) this.winner = PlayerType.Jaguar;
+    if (this.board.isDogsWinner()) this.winner = PlayerType.Dog;
+  }
+  
+  public boolean hasWinner() {
+    return this.winner != null;
+  }
+  
+  public boolean isWinner(Player p) {
+    if (this.winner == null) return false;
+    if (this.isPlayer1(p) && this.winner == PlayerType.Jaguar) return true;
+    if (this.isPlayer2(p) && this.winner == PlayerType.Dog) return true;
+    return false;
+  }
+  
+  private boolean checkTimeout() {
+    Date now = new Date();
+    if (this.lastPlayAt != null) {
+      if (now.getTime() - this.lastPlayAt.getTime() > MOVE_TIMEOUT) {
+        return true;
+      }
+    }
+    this.lastPlayAt = now;
+    return false;
+  }
+  
+  public int move(int dogId, Direction direction) {
+    checkWinner();
+
+    if (hasWinner()) {
+      return 2; // game has winner!
+    }
+
+    if (checkTimeout()) {
+      setWinnerByTimeout();
+      return 2; // usuário da vez perdeu por WO
+    }
+    
+    Piece piece = null;
+    if (dogId == -1)
+      piece = this.board.getJaguar();
+    else
+      piece = this.board.getDog(dogId);
+    
+    if (!this.board.canMove(piece, direction)) return 0;
+    this.board.move(piece, direction);
+    
+    if (this.turn == PlayerType.Jaguar)
+      this.turn = PlayerType.Dog;
+    else
+      this.turn = PlayerType.Jaguar;
+    
+    checkWinner();
+    
+    if (hasWinner()) {
+      return 2; // game has winner!
+    }
+
     return 1;
   }
   
-  public int moveDog(int dogId, Direction direction) {
-    Piece dog = this.board.getDog(dogId);
-    if (!this.board.canMove(dog, direction)) return 0;
-    this.board.move(dog, direction);
-    this.turn = PlayerType.Jaguar;
-    return 1;
+  private void setWinnerByTimeout() {
+    if (this.turn == PlayerType.Jaguar)
+      this.winner = PlayerType.Dog;
+    else
+      this.winner = PlayerType.Jaguar;
+    
+    this.winnerByTimeout = true;
+  }
+  
+  public boolean matchmakingTimeout() {
+    Date now = new Date();
+    if (now.getTime() - this.createdAt.getTime() > MATCHMAKING_TIMEOUT) {
+      return true;
+    }
+    return false;
   }
 }

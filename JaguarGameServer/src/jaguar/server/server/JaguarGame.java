@@ -4,7 +4,7 @@ import jaguar.common.Direction;
 import jaguar.common.JaguarGameInterface;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import jaguar.server.util.GameManager;
+import jaguar.server.util.Manager;
 
 /**
  *
@@ -14,10 +14,10 @@ public class JaguarGame extends UnicastRemoteObject implements JaguarGameInterfa
   public static final int MAX_GAMES = 50;
   public static final int MAX_PLAYERS = MAX_GAMES * 2;
   
-  private final GameManager manager;
+  private final Manager manager;
   
   public JaguarGame() throws RemoteException {
-    this.manager = new GameManager(JaguarGame.MAX_PLAYERS);
+    this.manager = new Manager(JaguarGame.MAX_PLAYERS);
   }
 
   @Override
