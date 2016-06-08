@@ -15,12 +15,4 @@ import javax.jws.WebParam;
  */
 @WebService(serviceName = "JaguarWS")
 public class JaguarWS {
-
-  /**
-   * This is a sample web service operation
-   */
-  @WebMethod(operationName = "hello")
-  public String hello(@WebParam(name = "name") String txt) {
-    return "Hello " + txt + " !";
-  }
 }
