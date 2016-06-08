@@ -61,6 +61,7 @@ public class Jaguar extends Piece {
     // Se a próxima posição está vazia, o Jaguar simplesmente move-se para lá.
     if (next.isEmpty()) {
       next.setPiece(this);
+      this.board.setDogEaten(false);
     } else {
       // Se não, em 'next' há um cachorro que pode ser comido. Primeiro, devemos
       // devolver o cachorro ao lugar de onde nunca deveria ter saído: o céu.
@@ -69,6 +70,8 @@ public class Jaguar extends Piece {
       Dog dog = (Dog)next.getPiece();
       this.board.eatDog(dog.getId());
       next.setPiece(null);
+      
+      this.board.setDogEaten(true);
       
       // Em seguida, calculamos a posição do Jaguar após comer o cachorro.
       x = next.getX();

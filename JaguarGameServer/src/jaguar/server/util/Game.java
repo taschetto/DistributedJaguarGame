@@ -11,8 +11,8 @@ import java.util.Date;
  * @author Guilherme Taschetto
  */
 public class Game {
-  private static final int MOVE_TIMEOUT = 10 * 1000; // 30 seconds
-  private static final int MATCHMAKING_TIMEOUT = 1000 * 60 * 2; // 2 minutes
+  private static final int MOVE_TIMEOUT = 1000 * 30; // 30 seconds
+  private static final int MATCHMAKING_TIMEOUT = 1000 * 120; // 120 seconds
 
   private final int id;
   private Player player1;
@@ -144,8 +144,10 @@ public class Game {
     if (!this.board.canMove(piece, direction)) return 0;
     this.board.move(piece, direction);
     
-    if (this.turn == PlayerType.Jaguar)
-      this.turn = PlayerType.Dog;
+    if (this.turn == PlayerType.Jaguar) {
+      if (!this.board.getDogEaten())
+        this.turn = PlayerType.Dog;
+    }
     else
       this.turn = PlayerType.Jaguar;
     

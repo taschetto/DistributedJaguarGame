@@ -19,6 +19,7 @@ public class Board {
   private final Map<Key, Position> positions;
   private Jaguar jaguar;
   private Map<Integer, Dog> dogs;
+  private boolean dogEaten;
 
   public Board() {
     positions = new HashMap<>();
@@ -41,6 +42,8 @@ public class Board {
         positions.get(new Key(x, y)).setPiece(dog);
       }
     }
+    
+    dogEaten = false;
   }
   
   public boolean isMoveValid(int x, int y, Direction d) {
@@ -104,6 +107,14 @@ public class Board {
   public boolean isJaguarWinner() {
     // Para a onça ganhar o jogo, basta ter comido 5 cães.
     return dogs.size() < 10;
+  }
+  
+  public boolean getDogEaten() {
+    return this.dogEaten;
+  }
+  
+  public void setDogEaten(boolean dogEaten) {
+    this.dogEaten = dogEaten;
   }
 
   @Override
