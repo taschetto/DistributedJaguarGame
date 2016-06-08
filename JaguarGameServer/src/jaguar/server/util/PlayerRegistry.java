@@ -22,7 +22,17 @@ public class PlayerRegistry {
   
   public Player addPlayer(String name) throws InterruptedException {
     this.mutex.acquire();
+    while (this.players.containsValue(this.nextId))
+      this.nextId++;
     Player p = new Player(this.nextId++, name);
+    this.players.put(p.getId(), p);
+    this.mutex.release();
+    return p;
+  }
+  
+  public Player addPlayer(String name, int id) throws InterruptedException {
+    this.mutex.acquire();
+    Player p = new Player(id, name);
     this.players.put(p.getId(), p);
     this.mutex.release();
     return p;

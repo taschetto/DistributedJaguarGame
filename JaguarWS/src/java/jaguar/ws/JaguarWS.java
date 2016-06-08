@@ -33,8 +33,7 @@ public class JaguarWS {
    */
   @WebMethod(operationName = "preRegistro")
   public int preRegistro(@WebParam(name = "playerName1") final String playerName1, @WebParam(name = "playerId1") final int playerId1, @WebParam(name = "playerName2") final String playerName2, @WebParam(name = "playerId2") final int playerId2) {
-    //TODO write your implementation code here:
-    return 0;
+    return this.manager.preRegister(playerName1, playerId1, playerName2, playerId2);
   }
 
   /**

@@ -9,19 +9,34 @@ import jaguar.common.PlayerType;
  */
 public class Manager {
   
+  private PreRegistry preRegistry;
   private PlayerRegistry players;
   private GameRegistry games;
 
   public Manager(int maxPlayers) {
+    this.preRegistry = new PreRegistry();
     this.players = new PlayerRegistry(maxPlayers);
     this.games = new GameRegistry();
+  }
+  
+  public int preRegister(String playerName1, int playerId1, String playerName2, int playerId2) {
+    this.preRegistry.add(playerName1, playerId1);
+    this.preRegistry.add(playerName2, playerId1);
+    
+    return 0;
   }
   
   public int registerPlayer(String playerName) throws InterruptedException {
     if (this.players.isPlayerRegistered(playerName)) return -1;
     if (this.players.isMaxPlayersReached()) return -2;
     
-    Player newPlayer = this.players.addPlayer(playerName);
+    int id = this.preRegistry.get(playerName);
+    Player newPlayer = null;
+    if (id == -1)
+      newPlayer = this.players.addPlayer(playerName);
+    else
+      newPlayer = this.players.addPlayer(playerName, id);
+
     System.out.println("Registered player '" + newPlayer.getName() + "' with ID " + newPlayer.getId() + ".");
     
     Game g = this.games.getGame();
@@ -78,6 +93,8 @@ public class Manager {
     if (p == null) return -1;
     Game g = p.getGame();
     if (g == null) return -1;
+    
+    if (!g.hasPlayer1() || !g.hasPlayer2()) return -2;
     
     if (g.hasWinner()) {
       if (g.isWinnerByTimeout()) {
