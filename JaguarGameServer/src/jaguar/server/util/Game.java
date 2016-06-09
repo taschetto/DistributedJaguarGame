@@ -150,12 +150,6 @@ public class Game {
     }
     else
       this.turn = PlayerType.Jaguar;
-    
-    checkWinner();
-    
-    if (hasWinner()) {
-      return 2; // game has winner!
-    }
 
     return 1;
   }

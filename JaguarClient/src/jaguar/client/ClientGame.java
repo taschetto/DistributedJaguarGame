@@ -196,9 +196,9 @@ public class ClientGame {
   public int promptForDog() {
     StringBuilder output = new StringBuilder("Which doge you wanna move?\n\t");
     
-    for (int i = 1; i <= 14; i++) {
+    for (int i = 0; i < 14; i++) {
       output.append(i);
-      if (i < 14) output.append(", ");
+      if (i < 13) output.append(", ");
     }
 
     output.append("\n >> ");

@@ -32,10 +32,10 @@ public class Board {
     jaguar = new Jaguar(this);
     positions.get(new Key(2, 2)).setPiece(jaguar);
     
-    int dogId = 1;
+    int dogId = 0;
     dogs = new HashMap<>();
-    for (int x = 2; x > 0; x--) {
-      for (int y = Board.ROWS - 1; y > 0; y--) {
+    for (int x = 2; x >= 0; x--) {
+      for (int y = Board.ROWS - 1; y >= 0; y--) {
         if (x == 2 && y == 2) continue; // skip Jaguar's location    
         Dog dog = new Dog(dogId++, this);
         dogs.put(dog.getId(), dog);
@@ -120,6 +120,27 @@ public class Board {
   @Override
   public String toString() {
     String str = "";
+    
+    
+    for (int y = Board.ROWS - 1; y >= 0; y--) {
+      for (int x = 0; x < Board.COLS; x++) {
+        Piece piece = positions.get(new Key(x, y)).getPiece();
+        if (piece == null) {
+          if ((x == 5 && y == 4) || (x == 6 && y == 3) || (x == 6 && y == 1) || (x == 5 && y == 0))
+            str += "x";
+          else
+            str += ".";
+            //str += ".[" + x + "," + y + "]";
+        } else {
+          if (piece instanceof Dog)
+            str += "C";
+          else
+            str += "O";
+        }
+      }
+    }
+    
+    /*str += "\n";
 
     for (int y = Board.ROWS - 1; y >= 0; y--) {
       for (int x = 0; x < Board.COLS; x++) {
@@ -148,6 +169,7 @@ public class Board {
             str += "  ";
         }
       }
+      str += "\n";
       switch (y) {
         case 4: str += " |  \\  |  /  |  \\  |  /  |        /  |\n"; break;
         case 3: str += " |  /  |  \\  |  /  |  \\  |  /        |\n"; break;
@@ -155,7 +177,7 @@ public class Board {
         case 1: str += " |  /  |  \\  |  /  |  \\  |        \\  |\n"; break;
         default: break;
       }
-    }
+    }*/
     return str;
   }
 }
