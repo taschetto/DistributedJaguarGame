@@ -50,6 +50,8 @@ public class Manager {
     if (p == null) return -1;
     Game g = p.getGame();
     if (g == null) return -1;
+    
+    this.games.endGame(g);
 
     return 0;
   }
