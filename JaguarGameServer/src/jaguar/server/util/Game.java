@@ -96,7 +96,7 @@ public class Game {
     return this.turn;
   }
   
-  private void checkWinner() {
+  public void checkWinner() {
     if (this.board.isJaguarWinner()) this.winner = PlayerType.Jaguar;
     if (this.board.isDogsWinner()) this.winner = PlayerType.Dog;
   }

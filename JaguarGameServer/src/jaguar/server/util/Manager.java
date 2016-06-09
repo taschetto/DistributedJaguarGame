@@ -51,7 +51,7 @@ public class Manager {
     Game g = p.getGame();
     if (g == null) return -1;
     
-    this.games.endGame(g);
+    this.endGame(p);
 
     return 0;
   }
@@ -98,24 +98,26 @@ public class Manager {
     
     if (!g.hasPlayer1() || !g.hasPlayer2()) return -2;
     
+    g.checkWinner();
+    
     if (g.hasWinner()) {
       if (g.isWinnerByTimeout()) {
         if (g.isWinner(p)) {
-          this.endGame(p);
+          //this.endGame(p);
           return 5;
         }
         else {
-          this.endGame(p);
+          //this.endGame(p);
           return 6;
         }
       }
       else {
         if (g.isWinner(p)) {
-          this.endGame(p);
+          //this.endGame(p);
           return 2;
         }
         else {
-          this.endGame(p);
+          //this.endGame(p);
           return 3;
         }
       }
