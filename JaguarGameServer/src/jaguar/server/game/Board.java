@@ -34,8 +34,8 @@ public class Board {
     
     int dogId = 1;
     dogs = new HashMap<>();
-    for (int x = 0; x < 3; x++) {
-      for (int y = 0; y < Board.ROWS; y++) {
+    for (int x = 2; x > 0; x--) {
+      for (int y = Board.ROWS - 1; y > 0; y--) {
         if (x == 2 && y == 2) continue; // skip Jaguar's location    
         Dog dog = new Dog(dogId++, this);
         dogs.put(dog.getId(), dog);
@@ -148,7 +148,6 @@ public class Board {
             str += "  ";
         }
       }
-      str += "\n";
       switch (y) {
         case 4: str += " |  \\  |  /  |  \\  |  /  |        /  |\n"; break;
         case 3: str += " |  /  |  \\  |  /  |  \\  |  /        |\n"; break;

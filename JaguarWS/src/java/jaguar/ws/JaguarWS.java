@@ -81,7 +81,19 @@ public class JaguarWS {
    */
   @WebMethod(operationName = "enviaJogadaOnca")
   public int enviaJogadaOnca(@WebParam(name = "playerId") final int playerId, @WebParam(name = "direction") final int direction) throws InterruptedException {
-    return this.manager.sendMove(playerId, -1, Direction.values()[direction]);
+
+    Direction dir = null;
+    switch (direction) {
+      case 0: dir = Direction.Right; break;
+      case 1: dir = Direction.DownRight; break;
+      case 2: dir = Direction.Down; break;
+      case 3: dir = Direction.DownLeft; break;
+      case 4: dir = Direction.Left; break;
+      case 5: dir = Direction.UpLeft; break;
+      case 6: dir = Direction.Up; break;
+      case 7: dir = Direction.UpRight; break;
+    }
+    return this.manager.sendMove(playerId, -1, dir);
   }
 
   /**
@@ -89,7 +101,18 @@ public class JaguarWS {
    */
   @WebMethod(operationName = "enviaJogadaCao")
   public int enviaJogadaCao(@WebParam(name = "playerId") final int playerId, @WebParam(name = "dogId") final int dogId, @WebParam(name = "direction") final int direction) throws InterruptedException {
-    return this.manager.sendMove(playerId, dogId, Direction.values()[direction]);
+    Direction dir = null;
+    switch (direction) {
+      case 0: dir = Direction.Right; break;
+      case 1: dir = Direction.DownRight; break;
+      case 2: dir = Direction.Down; break;
+      case 3: dir = Direction.DownLeft; break;
+      case 4: dir = Direction.Left; break;
+      case 5: dir = Direction.UpLeft; break;
+      case 6: dir = Direction.Up; break;
+      case 7: dir = Direction.UpRight; break;
+    }
+    return this.manager.sendMove(playerId, dogId, dir);
   }
 
   /**

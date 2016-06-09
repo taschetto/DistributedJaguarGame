@@ -21,7 +21,7 @@ public class Manager {
   
   public int preRegister(String playerName1, int playerId1, String playerName2, int playerId2) {
     this.preRegistry.add(playerName1, playerId1);
-    this.preRegistry.add(playerName2, playerId1);
+    this.preRegistry.add(playerName2, playerId2);
     
     return 0;
   }
