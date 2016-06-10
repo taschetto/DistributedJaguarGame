@@ -50,12 +50,12 @@ public class GameRegistry {
       for (Game game : this.gameRegistry) {
         if (game.hasPlayer1()) {
           Player p1 = game.getPlayer1();
-          if (p1.getName().equals(record.getPlayerName1()) || p1.getName().equals(record.getPlayerName2())) {
+          if (p1 != null && (p1.getName().equals(record.getPlayerName1()) || p1.getName().equals(record.getPlayerName2()))) {
             mutex.release();
             return game;            
           }
           Player p2 = game.getPlayer2();
-          if (p2.getName().equals(record.getPlayerName1()) || p2.getName().equals(record.getPlayerName2())) {
+          if (p2 != null && (p2.getName().equals(record.getPlayerName1()) || p2.getName().equals(record.getPlayerName2()))) {
             mutex.release();
             return game;            
           }
