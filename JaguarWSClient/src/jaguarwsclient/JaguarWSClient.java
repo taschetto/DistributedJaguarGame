@@ -16,7 +16,6 @@ public class JaguarWSClient {
 
   public static void main(String[] args) throws IOException, InterruptedException_Exception {
     executaTeste("JogoDaOnca-000");
-    executaTeste("JogoDaOnca-001");
   }
 
   private static void executaTeste(String rad) throws IOException, InterruptedException_Exception {
