@@ -1,4 +1,4 @@
-package jaguarwsclient;
+  package jaguarwsclient;
 
 import jaguar.ws.InterruptedException_Exception;
 import java.io.File;
@@ -16,6 +16,12 @@ public class JaguarWSClient {
 
   public static void main(String[] args) throws IOException, InterruptedException_Exception {
     executaTeste("JogoDaOnca-000");
+    executaTeste("JogoDaOnca-001");
+    executaTeste("JogoDaOnca-002");
+    executaTeste("JogoDaOnca-003");
+    executaTeste("JogoDaOnca-004");
+    executaTeste("JogoDaOnca-005");
+    executaTeste("GuilhermeTaschetto");
   }
 
   private static void executaTeste(String rad) throws IOException, InterruptedException_Exception {
