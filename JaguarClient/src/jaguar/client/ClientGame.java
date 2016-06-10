@@ -203,9 +203,9 @@ public class ClientGame {
 
     output.append("\n >> ");
 
-    int playerChoice = 0;
+    int playerChoice = -1;
 
-    while (playerChoice < 1 || playerChoice > 14) {
+    while (playerChoice < 0 || playerChoice > 13) {
       System.out.print(output.toString());
       playerChoice = Integer.parseInt(new Scanner(System.in).next());
     }

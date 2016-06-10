@@ -145,6 +145,9 @@ public class Manager {
     Game g = p.getGame();
     if (g == null) return -1;
     
+    if (g.getTurn() == PlayerType.Jaguar && g.getPlayer1() != p) return -1;
+    if (g.getTurn() == PlayerType.Dog && g.getPlayer2() != p) return -1;
+    
     return g.move(dogId, direction);
   }
   
