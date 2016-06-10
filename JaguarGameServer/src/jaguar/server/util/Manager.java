@@ -20,8 +20,7 @@ public class Manager {
   }
   
   public int preRegister(String playerName1, int playerId1, String playerName2, int playerId2) {
-    this.preRegistry.add(playerName1, playerId1);
-    this.preRegistry.add(playerName2, playerId2);
+    this.preRegistry.add(playerName1, playerId1, playerName2, playerId2);
     
     return 0;
   }
@@ -30,16 +29,21 @@ public class Manager {
     if (this.players.isPlayerRegistered(playerName)) return -1;
     if (this.players.isMaxPlayersReached()) return -2;
     
-    int id = this.preRegistry.get(playerName);
     Player newPlayer = null;
-    if (id == -1)
-      newPlayer = this.players.addPlayer(playerName);
-    else
+    Game g = null;
+
+    Record record = this.preRegistry.get(playerName);
+    if (record != null) {
+      int id = record.getPlayerId1();
+      if (record.getPlayerName2().equals(playerName)) id = record.getPlayerId2();
       newPlayer = this.players.addPlayer(playerName, id);
+      g = this.games.getGame(record);
+    } else {
+      newPlayer = this.players.addPlayer(playerName);
+      g = this.games.getGame();
+    }
 
     System.out.println("Registered player '" + newPlayer.getName() + "' with ID " + newPlayer.getId() + ".");
-    
-    Game g = this.games.getGame();
     newPlayer.setGame(g);
     
     return newPlayer.getId();
@@ -145,8 +149,13 @@ public class Manager {
     Game g = p.getGame();
     if (g == null) return -1;
     
-    if (g.getTurn() == PlayerType.Jaguar && g.getPlayer1() != p) return -1;
-    if (g.getTurn() == PlayerType.Dog && g.getPlayer2() != p) return -1;
+    // Valida se é a vez do player
+    if (g.getTurn() == PlayerType.Dog && p == g.getPlayer1()) return -3;
+    if (g.getTurn() == PlayerType.Jaguar && p == g.getPlayer2()) return -3;
+    
+    // Valida se usou o animal certo
+    if (dogId == -1 && p == g.getPlayer2()) return -4;
+    if (dogId != -1 && p == g.getPlayer1()) return -4;
     
     return g.move(dogId, direction);
   }

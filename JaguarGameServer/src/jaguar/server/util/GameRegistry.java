@@ -45,6 +45,27 @@ public class GameRegistry {
     return createGame();
   }
   
+  public Game getGame(Record record) throws InterruptedException {
+    mutex.acquire();
+      for (Game game : this.gameRegistry) {
+        if (game.hasPlayer1()) {
+          Player p1 = game.getPlayer1();
+          if (p1.getName().equals(record.getPlayerName1()) || p1.getName().equals(record.getPlayerName2())) {
+            mutex.release();
+            return game;            
+          }
+          Player p2 = game.getPlayer2();
+          if (p2.getName().equals(record.getPlayerName1()) || p2.getName().equals(record.getPlayerName2())) {
+            mutex.release();
+            return game;            
+          }
+        }
+      }
+    mutex.release();
+
+    return createGame();
+  }
+  
   public void endGame(Game g) throws InterruptedException {
     mutex.acquire();
     this.gameRegistry.remove(g);

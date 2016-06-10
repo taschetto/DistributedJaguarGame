@@ -124,6 +124,14 @@ public class Game {
   }
   
   public int move(int dogId, Direction direction) {
+    Piece piece = null;
+    if (dogId == -1)
+      piece = this.board.getJaguar();
+    else
+      piece = this.board.getDog(dogId);
+    
+    if (piece == null) return -1;
+
     checkWinner();
 
     if (hasWinner()) {
@@ -134,12 +142,6 @@ public class Game {
       setWinnerByTimeout();
       return 2; // usuário da vez perdeu por WO
     }
-    
-    Piece piece = null;
-    if (dogId == -1)
-      piece = this.board.getJaguar();
-    else
-      piece = this.board.getDog(dogId);
     
     if (!this.board.canMove(piece, direction)) return 0;
     this.board.move(piece, direction);
