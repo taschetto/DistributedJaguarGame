@@ -26,7 +26,6 @@ CC.C.x.CC.C..xC.O....CC.C..xCCC..x.
 1
 CC.C.x.CC.C..xC..O...CC.C..xCC.C.x.
 1
--1
 1
 CC.C.x.CC.C..xC..CO..CC....xCC.C.x.
 1
